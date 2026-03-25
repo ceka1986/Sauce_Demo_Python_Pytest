@@ -32,22 +32,18 @@ def driver():
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    # Izvršava sve ostale hook-ove da dobijemo izveštaj
+
     outcome = yield
     rep = outcome.get_result()
 
-    # Proveravamo da li je test pao (failed) tokom faze "call" (izvršavanja)
     if rep.when == "call" and rep.failed:
         mode = "a" if os.path.exists("failures.txt") else "w"
         try:
-            # Uzimamo drajver iz fixture-a
             driver = item.funcargs['driver']
             
-            # Pravimo folder za screenshot-ove ako ne postoji
             if not os.path.exists("screenshots"):
                 os.makedirs("screenshots")
             
-            # Ime slike: naziv_testa.png
             screenshot_name = f"screenshots/{item.name}.png"
             driver.save_screenshot(screenshot_name)
             print(f"\nScreenshot saved to: {screenshot_name}")
@@ -56,25 +52,25 @@ def pytest_runtest_makereport(item, call):
 
 
 @pytest.fixture
-def login_page(driver): return LoginPage(driver)
+def login_page(driver) -> LoginPage: return LoginPage(driver)
 
 @pytest.fixture
-def inventory_page(driver): return InventoryPage(driver)
+def inventory_page(driver) -> InventoryPage: return InventoryPage(driver)
 
 @pytest.fixture
-def product_details_page(driver): return ProductDetailsPage(driver)
+def product_details_page(driver) -> ProductDetailsPage: return ProductDetailsPage(driver)
 
 @pytest.fixture
-def cart_page(driver): return CartPage(driver)
+def cart_page(driver) -> CartPage: return CartPage(driver)
 
 @pytest.fixture
-def sidebar(driver): return Sidebar(driver)
+def sidebar(driver) -> Sidebar: return Sidebar(driver)
 
 @pytest.fixture
-def checkout_step_one_page(driver): return CheckoutStepOnePage(driver)
+def checkout_step_one_page(driver) -> CheckoutStepOnePage: return CheckoutStepOnePage(driver)
 
 @pytest.fixture
-def checkout_step_two_page(driver): return CheckoutStepTwoPage(driver)
+def checkout_step_two_page(driver) -> CheckoutStepTwoPage: return CheckoutStepTwoPage(driver)
 
 @pytest.fixture
-def checkout_complete_page(driver): return CheckoutCompletePage(driver)
+def checkout_complete_page(driver) -> CheckoutCompletePage: return CheckoutCompletePage(driver)
