@@ -31,7 +31,7 @@ class InventoryPage(BasePage):
     
     def get_title(self):
         """Returns the title element of the inventory page"""
-        return self.find(self._TITLE)
+        return self.find(self._TITLE).text
     
     def get_item_name(self, item_name):
         """Returns the text of the product name for a specific item"""
