@@ -12,15 +12,7 @@ class BasePage:
         self.driver = driver
         self.wait = WebDriverWait(driver, timeout)
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.url = None
-
-    def navigate_to(self):
-        """Navigates to the URL defined in the specific page class"""
-        if self.url:
-            self.driver.get(self.url)
-        else:
-            self.logger.error("URL is not defined for this page")
-            raise AttributeError("URL must be defined in the child page class")
+        
 
     def find(self, locator):
         """Waits for an element to be visible on the page and returns it"""

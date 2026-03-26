@@ -15,7 +15,7 @@ class LoginPage(BasePage):
         self.url = "https://www.saucedemo.com"
 
     
-    def navigate_to(self):
+    def open(self):
         """Opens the login page URL directly"""
         self.driver.get(self.url)
 
@@ -38,4 +38,8 @@ class LoginPage(BasePage):
     def is_login_button_displayed(self):
         """Used to verify the user is on the login page (e.g., after Logout)"""
         return self.find(self._LOGIN_BUTTON).is_displayed()
+    
+    def is_at(self):
+        """Checks if the browser is currently on the expected page URL"""
+        return self.driver.current_url.rstrip('/') == self.url.rstrip('/')
 

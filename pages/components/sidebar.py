@@ -23,6 +23,7 @@ class Sidebar(BasePage):
     def logout(self):
         """Opens the menu and performs the logout action"""
         self.open_menu()
+        self.wait_for_clickable(self._LOGOUT_LINK)
         self.click(self._LOGOUT_LINK)
     
     def reset_app_state(self):
