@@ -46,3 +46,7 @@ class BasePage:
     def wait_for_clickable(self, locator):
         """Explicitly waits for an element to be in a clickable state"""
         return self.wait.until(EC.element_to_be_clickable(locator))
+    
+    def refresh_page(self):
+        """Refreshes the current browser page"""
+        self.driver.refresh()
