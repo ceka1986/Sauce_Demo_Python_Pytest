@@ -68,8 +68,11 @@ class InventoryPage(BasePage):
         self.click(self._CART_LINK)
 
     def get_cart_badge_count(self):
-        """Returns the number of items shown on the cart badge"""
-        return self.get_text(self._CART_BADGE)
+        """Returns the number shown on the red cart badge"""
+        try:
+            return self.get_text(self._CART_BADGE)
+        except:
+            return "0"
     
     def is_item_in_cart(self, item_name):
         """Checks if a specific item is currently in the cart based on the button text"""
