@@ -24,8 +24,27 @@ class TestInventory:
         
     
     def test_remove_item_from_cart(self, inventory_page:InventoryPage):
-        inventory_page.add_item_to_cart(TestData.BACKPACK)
-        inventory_page.remove_item_from_cart(TestData.BACKPACK)
+        item = TestData.BACKPACK
+        inventory_page.add_item_to_cart(item)
+        inventory_page.remove_item_from_cart(item)
 
-        assert not inventory_page.is_item_in_cart(TestData.BACKPACK)
-        
+        assert not inventory_page.is_item_in_cart(item)
+
+    @pytest.mark.parametrize("sort_option, reverse", [
+        (TestData.SORT_A_TO_Z, False),
+        (TestData.SORT_Z_TO_A, True)])
+    def test_sort_by_name(self, inventory_page:InventoryPage, sort_option, reverse):
+        inventory_page.select_sort_option(sort_option)
+        names = inventory_page.get_all_item_names()
+
+        assert names == sorted(names, reverse=reverse)
+
+    @pytest.mark.parametrize("sort_option, reverse", [
+        (TestData.SORT_LOW_TO_HIGH, False),
+        (TestData.SORT_HIGH_TO_LOW, True)])
+    def test_sort_by_price(self, inventory_page: InventoryPage, sort_option, reverse):
+        inventory_page.select_sort_option(sort_option)
+        prices = inventory_page.get_all_item_prices()
+    
+        assert prices == sorted(prices, reverse=reverse)
+
