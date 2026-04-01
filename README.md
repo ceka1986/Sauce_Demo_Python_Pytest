@@ -23,7 +23,7 @@ SauceDemoPython/
 ├── pytest.ini           # Pytest configuration settings
 └── requirements.txt     # List of project dependencies
 
-Samo iskopiraj ceo ovaj blok ispod direktno u svoj README.md fajl:
+
 
 Markdown
 # 🚀 SauceDemo Automation Framework
