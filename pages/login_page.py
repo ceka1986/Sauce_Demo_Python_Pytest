@@ -30,7 +30,7 @@ class LoginPage(BasePage):
         self.click(self._LOGIN_BUTTON)
 
 
-    def get_error_text(self):
+    def get_error_message(self):
         """Retrieves the error message text displayed on failed login"""
         return self.get_text(self._ERROR_MESSAGE)
 
