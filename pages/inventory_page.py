@@ -31,6 +31,7 @@ class InventoryPage(BasePage):
         """Adds a specific item to the shopping cart"""
         locator = self._get_dynamic_button_locator(item_name)
         self.click(locator)
+        self.wait_for_text(locator, "Remove")
         
     def remove_item_from_cart(self, item_name):
         """Removes a specific item from the shopping cart"""
@@ -46,6 +47,7 @@ class InventoryPage(BasePage):
     def click_cart_icon(self):
         """Clicks on the shopping cart icon to navigate to the cart page"""
         self.click(self._CART_LINK)
+        self.wait_for_text(self._PAGE_TITLE, "Your Cart")
 
     def get_cart_badge_count(self):
         """Returns the number shown on the red cart badge"""
