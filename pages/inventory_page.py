@@ -77,3 +77,8 @@ class InventoryPage(BasePage):
         """Returns a list of all item prices as floats"""
         elements = self.find_all(self._ITEM_PRICE)
         return [float(el.text.replace('$', '')) for el in elements]
+    
+    def wait_for_button_text(self, item_name, text):
+        """Wait for a specific button to change its text"""
+        locator = self._get_dynamic_button_locator(item_name)
+        return self.wait_for_text(locator, text)

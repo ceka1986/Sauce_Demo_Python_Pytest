@@ -44,7 +44,7 @@ class CheckoutStepOnePage(BasePage):
 
     def click_on_continue_button(self):
         """Clicks the 'Continue' button to proceed to the next step"""
-        self.click(self._CONTINUE_BUTTON)
+        self.js_click(self._CONTINUE_BUTTON)
 
     def click_on_cancel_button(self):
         """Clicks the 'Cancel' button to return to the Cart page"""
