@@ -2,66 +2,44 @@ from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
-
 class InventoryPage(BasePage):
    
-
     _TITLE = (By.CSS_SELECTOR, "[data-test='title']")  
     _SORT_CONTAINER = (By.CSS_SELECTOR, "[data-test='product-sort-container']")
     _CART_LINK = (By.CSS_SELECTOR, "[data-test='shopping-cart-link']")
     _CART_BADGE = (By.CSS_SELECTOR, "[data-test='shopping-cart-badge']") 
     
-    _INVENTORY_ITEM = (By.CSS_SELECTOR, "[data-test='inventory-item']")
-
     _ITEM_NAME = (By.CSS_SELECTOR, "[data-test='inventory-item-name']")
     _ITEM_PRICE = (By.CSS_SELECTOR, "[data-test='inventory-item-price']")
-    _ITEM_DESC = (By.CSS_SELECTOR, "[data-test='inventory-item-desc']")
-    _ADD_TO_CART_BUTTON = (By.CSS_SELECTOR, ".btn_inventory") 
 
     def __init__(self, driver):
         """Initializes the InventoryPage with the WebDriver and sets the page URL"""
         super().__init__(driver)
         self.url = "https://www.saucedemo.com/inventory.html"
 
-    def _get_item_container(self, item_name):
-        """Finds and returns the container element for a specific product by name"""
-        xpath = f"//div[@data-test='inventory-item'][descendant::div[normalize-space()='{item_name}']]"
-        locator = (By.XPATH, xpath)
-        return self.find(locator)
-    
+    def _get_dynamic_button_locator(self, item_name):
+        """Generates a dynamic XPath locator for a specific item's button based on product name"""
+        xpath = f"//div[@data-test='inventory-item'][descendant::div[normalize-space()='{item_name}']]//button"
+        return (By.XPATH, xpath)
+
     def get_title(self):
         """Returns the title element of the inventory page"""
-        return self.find(self._TITLE).text
-    
-    def get_item_name(self, item_name):
-        """Returns the text of the product name for a specific item"""
-        container = self._get_item_container(item_name)
-        return container.find_element(*self._ITEM_NAME).text
-    
-    def get_item_price(self, item_name):
-        """Returns the price text for a specific item"""
-        container = self._get_item_container(item_name)
-        return container.find_element(*self._ITEM_PRICE).text
-    
-    def get_item_description(self, item_name):
-        """Returns the description text for a specific item"""
-        container = self._get_item_container(item_name)
-        return container.find_element(*self._ITEM_DESC).text
+        return self.get_text(self._TITLE)
     
     def add_item_to_cart(self, item_name):
         """Adds a specific item to the shopping cart"""
-        container = self._get_item_container(item_name)
-        container.find_element(*self._ADD_TO_CART_BUTTON).click()
+        locator = self._get_dynamic_button_locator(item_name)
+        self.click(locator)
         
     def remove_item_from_cart(self, item_name):
         """Removes a specific item from the shopping cart"""
-        container = self._get_item_container(item_name)
-        container.find_element(*self._ADD_TO_CART_BUTTON).click()
+        locator = self._get_dynamic_button_locator(item_name)
+        self.click(locator)
 
     def get_button_text(self, item_name):
         """Returns the current text of the Add to Cart/Remove button for a specific item"""
-        container = self._get_item_container(item_name)
-        return container.find_element(*self._ADD_TO_CART_BUTTON).text
+        locator = self._get_dynamic_button_locator(item_name)
+        return self.get_text(locator)
 
     def click_cart_icon(self):
         """Clicks on the shopping cart icon to navigate to the cart page"""
