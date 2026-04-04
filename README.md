@@ -1,6 +1,9 @@
 # 🚀 SauceDemo Automation Framework
 
-A professional end-to-end (E2E) automation framework built with **Python**, **Selenium**, and **Pytest**. This project demonstrates the implementation of the **Page Object Model (POM)** design pattern to test the [SauceDemo](https://www.saucedemo.com/) e-commerce platform.
+A professional end-to-end (E2E) automation framework built with
+**Python**, **Selenium**, and **Pytest**. This project
+demonstrates the implementation of the **Page Object Model (POM)**
+design pattern to test the [SauceDemo](https://www.saucedemo.com/) e-commerce platform.
 
 ## 🛠️ Tech Stack
 
@@ -28,7 +31,10 @@ SauceDemoPython/
 
 # 🚀 SauceDemo Automation Framework
 
-A professional end-to-end (E2E) automation framework built with **Python**, **Selenium**, and **Pytest**. This project demonstrates the implementation of the **Page Object Model (POM)** design pattern to test the [SauceDemo](https://www.saucedemo.com/) e-commerce platform.
+A professional end-to-end (E2E) automation framework built with **Python**,
+**Selenium**, and **Pytest**. This project demonstrates the implementation
+of the **Page Object Model (POM)** design pattern to test the [SauceDemo]
+(https://www.saucedemo.com/) e-commerce platform.
 
 ## 🛠️ Tech Stack
 

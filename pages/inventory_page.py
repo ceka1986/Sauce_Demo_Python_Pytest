@@ -54,11 +54,10 @@ class InventoryPage(BasePage):
             return "0"
     
     def is_item_in_cart(self, item_name):
-        """Checks if the button text has changed to 'Remove' with a retry wait"""
+        """Checks if the button text has changed to 'Remove' using the BasePage wait"""
         locator = self._get_dynamic_button_locator(item_name)
         try:
-            # Ovo je ključ: Čekamo BAŠ da se pojavi tekst "Remove" na tom dugmetu
-            self.wait.until(EC.text_to_be_present_in_element(locator, "Remove"))
+            self.wait_for_text(locator, "Remove")
             return True
         except:
             return False
