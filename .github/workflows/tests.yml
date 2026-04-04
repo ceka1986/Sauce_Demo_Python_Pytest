@@ -25,5 +25,16 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Pytest
+
         run: |
           pytest -v --html=reports/report.html --self-contained-html
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports-and-screenshots
+          path: |
+            reports/
+            screenshots/
+          retention-days: 5
