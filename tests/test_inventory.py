@@ -28,7 +28,7 @@ class TestInventory:
         inventory_page.add_item_to_cart(item)
         inventory_page.remove_item_from_cart(item)
 
-        assert not inventory_page.is_item_in_cart(item)
+        assert inventory_page.get_button_text(item) == "Add to cart"
 
     @pytest.mark.parametrize("sort_option, reverse", [
         (TestData.SORT_A_TO_Z, False),

@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class InventoryPage(BasePage):
    
-    _TITLE = (By.CSS_SELECTOR, "[data-test='title']")  
+    _PAGE_TITLE = (By.CSS_SELECTOR, "[data-test='title']")  
     _SORT_CONTAINER = (By.CSS_SELECTOR, "[data-test='product-sort-container']")
     _CART_LINK = (By.CSS_SELECTOR, "[data-test='shopping-cart-link']")
     _CART_BADGE = (By.CSS_SELECTOR, "[data-test='shopping-cart-badge']") 
@@ -25,7 +25,7 @@ class InventoryPage(BasePage):
 
     def get_title(self):
         """Returns the title element of the inventory page"""
-        return self.get_text(self._TITLE)
+        return self.get_text(self._PAGE_TITLE)
     
     def add_item_to_cart(self, item_name):
         """Adds a specific item to the shopping cart"""
