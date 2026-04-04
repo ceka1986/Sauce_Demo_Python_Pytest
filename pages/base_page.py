@@ -53,7 +53,7 @@ class BasePage:
 
     def js_click(self, locator):
         """Performs a click using JavaScript. Useful for elements blocked by overlays or off-screen."""
-        element = self.find(locator)
+        element = self.wait_for_presence(locator)
         self.driver.execute_script("arguments[0].click();", element)
 
     def wait_for_text(self, locator, text):
@@ -63,3 +63,7 @@ class BasePage:
         except TimeoutException:
             self.logger.error(f"Timeout: Text '{text}' not found in element {locator}!")
             raise
+
+    def wait_for_presence(self, locator):
+        """Waits only for the element to exist in the DOM"""
+        return self.wait.until(EC.presence_of_element_located(locator))
