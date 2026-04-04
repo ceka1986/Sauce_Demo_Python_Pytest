@@ -1,4 +1,5 @@
 import logging
+import os
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
@@ -7,9 +8,10 @@ from selenium.webdriver.remote.webdriver import WebDriver
 class BasePage:
   
 
-    def __init__(self, driver: WebDriver, timeout: int = 10):
+    def __init__(self, driver: WebDriver):
         """Initializes the BasePage with a driver and an explicit wait timeout"""
         self.driver = driver
+        timeout = 20 if os.environ.get('GITHUB_ACTIONS') else 10
         self.wait = WebDriverWait(driver, timeout)
         self.logger = logging.getLogger(self.__class__.__name__)
         
