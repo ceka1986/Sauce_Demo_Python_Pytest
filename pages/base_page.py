@@ -50,3 +50,16 @@ class BasePage:
     def refresh_page(self):
         """Refreshes the current browser page"""
         self.driver.refresh()
+
+    def js_click(self, locator):
+        """Performs a click using JavaScript. Useful for elements blocked by overlays or off-screen."""
+        element = self.find(locator)
+        self.driver.execute_script("arguments[0].click();", element)
+
+    def wait_for_text(self, locator, text):
+        """Waits for a specific text to appear in an element before proceeding"""
+        try:
+            return self.wait.until(EC.text_to_be_present_in_element(locator, text))
+        except TimeoutException:
+            self.logger.error(f"Timeout: Text '{text}' not found in element {locator}!")
+            raise
