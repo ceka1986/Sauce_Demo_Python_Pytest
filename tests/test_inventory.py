@@ -23,12 +23,13 @@ class TestInventory:
         assert inventory_page.get_cart_badge_count() == "1"
         
     
-    def test_remove_item_from_cart(self, inventory_page:InventoryPage):
+    def test_remove_item_from_cart(self, inventory_page: InventoryPage):
         item = TestData.BACKPACK
         inventory_page.add_item_to_cart(item)
         inventory_page.remove_item_from_cart(item)
 
-        assert inventory_page.get_button_text(item) == "Add to cart"
+        locator = inventory_page._get_dynamic_button_locator(item)
+        assert inventory_page.wait_for_text(locator, "Add to cart")
 
     @pytest.mark.parametrize("sort_option, reverse", [
         (TestData.SORT_A_TO_Z, False),

@@ -54,6 +54,7 @@ class BasePage:
     def js_click(self, locator):
         """Performs a click using JavaScript. Useful for elements blocked by overlays or off-screen."""
         element = self.wait_for_presence(locator)
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
         self.driver.execute_script("arguments[0].click();", element)
 
     def wait_for_text(self, locator, text):
