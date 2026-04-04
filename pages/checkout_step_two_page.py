@@ -53,7 +53,7 @@ class CheckoutStepTwoPage(BasePage):
 
     def click_finish_button(self):
         """Clicks the 'Finish' button to complete the purchase"""
-        self.click(self._FINISH_BUTTON)
+        self.js_click(self._FINISH_BUTTON)
     
 
 

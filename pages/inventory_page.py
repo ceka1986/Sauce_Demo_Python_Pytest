@@ -30,7 +30,7 @@ class InventoryPage(BasePage):
     def add_item_to_cart(self, item_name):
         """Adds a specific item to the shopping cart"""
         locator = self._get_dynamic_button_locator(item_name)
-        self.click(locator)
+        self.js_click(locator)
         
     def remove_item_from_cart(self, item_name):
         """Removes a specific item from the shopping cart"""
