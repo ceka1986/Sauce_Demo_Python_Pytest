@@ -1,6 +1,7 @@
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support import expected_conditions as EC
 
 class InventoryPage(BasePage):
    
@@ -53,8 +54,14 @@ class InventoryPage(BasePage):
             return "0"
     
     def is_item_in_cart(self, item_name):
-        """Checks if a specific item is currently in the cart based on the button text"""
-        return self.get_button_text(item_name) == "Remove"
+        """Checks if the button text has changed to 'Remove' with a retry wait"""
+        locator = self._get_dynamic_button_locator(item_name)
+        try:
+            # Ovo je ključ: Čekamo BAŠ da se pojavi tekst "Remove" na tom dugmetu
+            self.wait.until(EC.text_to_be_present_in_element(locator, "Remove"))
+            return True
+        except:
+            return False
     
     def select_sort_option(self, option_text):
         """Selects a sorting option from the dropdown menu by its visible text"""

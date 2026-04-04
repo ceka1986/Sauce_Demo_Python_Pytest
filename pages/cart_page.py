@@ -31,7 +31,7 @@ class CartPage(BasePage):
    
    def click_checkout(self):
       """Clicks the 'Checkout' button to proceed to the information entry page"""
-      self.click(self._CHECKOUT_BUTTON)
+      self.js_click(self._CHECKOUT_BUTTON)
    
    def _get_item_container(self, item_name):
         """Finds and returns the container element for a specific product by name"""
