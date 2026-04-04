@@ -4,3 +4,4 @@ reports/
 venv/
 .env
 *.log
+screenshots/*.png

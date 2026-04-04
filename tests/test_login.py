@@ -14,6 +14,7 @@ class TestLogin:
         login_page.open()
 
     def test_valid_login(self, login_page:LoginPage, inventory_page:InventoryPage):
+
         login_page.login_with_credentials(TestData.VALID_USER,  TestData.VALID_PASS)
 
         assert inventory_page.get_title() == "Products"
@@ -21,21 +22,24 @@ class TestLogin:
 
     @pytest.mark.parametrize("username, password, expected_error", TestData.INVALID_LOGIN_DATA)
     def test_invalid_logins(self, login_page:LoginPage, username, password, expected_error):
+
         login_page.login_with_credentials(username, password)
 
-        error_text = login_page.get_error_text()
+        error_message = login_page.get_error_message()
 
-        assert expected_error in error_text
+        assert expected_error in error_message
         assert login_page.is_login_button_displayed()
 
     def test_locked_out_user(self, login_page:LoginPage):
+
         login_page.login_with_credentials(TestData.LOCKED_USER, TestData.VALID_PASS)
         
 
-        assert TestData.ERR_LOCKED in login_page.get_error_text()
+        assert TestData.ERROR_LOCKED_OUT in login_page.get_error_message()
         assert login_page.is_login_button_displayed()
 
     def test_logout(self, login_page:LoginPage, sidebar:Sidebar):
+
         login_page.login_with_credentials(TestData.VALID_USER, TestData.VALID_PASS)
         sidebar.logout()
 
