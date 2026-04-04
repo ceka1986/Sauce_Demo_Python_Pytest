@@ -11,7 +11,10 @@ class BasePage:
     def __init__(self, driver: WebDriver):
         """Initializes the BasePage with a driver and an explicit wait timeout"""
         self.driver = driver
-        timeout = 20 if os.environ.get('GITHUB_ACTIONS') else 10
+        timeout =30 if os.environ.get('GITHUB_ACTIONS') else 10
+        is_ci = os.environ.get('GITHUB_ACTIONS') == 'true'
+
+        print(f"\n DEBUG: Running on CI: {is_ci}, Timeout set to: {timeout}")
         self.wait = WebDriverWait(driver, timeout)
         self.logger = logging.getLogger(self.__class__.__name__)
         
