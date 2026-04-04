@@ -29,7 +29,10 @@ class TestInventory:
         inventory_page.remove_item_from_cart(item)
 
         locator = inventory_page._get_dynamic_button_locator(item)
-        assert inventory_page.wait_for_text(locator, "Add to cart")
+        actual_text = inventory_page.get_text(locator)
+
+        assert actual_text == "Add to cart"
+        
 
     @pytest.mark.parametrize("sort_option, reverse", [
         (TestData.SORT_A_TO_Z, False),
