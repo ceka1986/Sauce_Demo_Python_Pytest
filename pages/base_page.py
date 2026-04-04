@@ -2,7 +2,7 @@ import logging
 import os
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import ElementClickInterceptedException, TimeoutException
 from selenium.webdriver.remote.webdriver import WebDriver
 
 class BasePage:
@@ -12,9 +12,6 @@ class BasePage:
         """Initializes the BasePage with a driver and an explicit wait timeout"""
         self.driver = driver
         timeout =30 if os.environ.get('GITHUB_ACTIONS') else 10
-        is_ci = os.environ.get('GITHUB_ACTIONS') == 'true'
-
-        print(f"\n DEBUG: Running on CI: {is_ci}, Timeout set to: {timeout}")
         self.wait = WebDriverWait(driver, timeout)
         self.logger = logging.getLogger(self.__class__.__name__)
         
@@ -34,9 +31,25 @@ class BasePage:
         return self.driver.find_elements(*locator)
 
     def click(self, locator):
-        """Waits until an element is clickable and then performs a click action"""
-        element = self.wait_for_clickable(locator)
-        element.click()
+        """
+        Attempts a standard Selenium click. 
+        Falls back to JavaScript click if the element is intercepted or hidden.
+        """
+        try:
+            element = self.wait.until(EC.element_to_be_clickable(locator))
+            element.click()
+        except (ElementClickInterceptedException, TimeoutException):
+            self.logger.warning(f"Standard click failed for {locator}. Falling back to JS click.")
+            self.js_click(locator)
+
+    def js_click(self, locator):
+        """
+        Forces a click using JavaScript after centering the element in the viewport.
+        """
+        # Ensure element exists in DOM before JS execution
+        element = self.wait.until(EC.presence_of_element_located(locator))
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+        self.driver.execute_script("arguments[0].click();", element)
 
     def type(self, locator, text):
         """Finds an element, clears any existing text, and types the new text"""
@@ -56,11 +69,6 @@ class BasePage:
         """Refreshes the current browser page"""
         self.driver.refresh()
 
-    def js_click(self, locator):
-        """Performs a click using JavaScript. Useful for elements blocked by overlays or off-screen."""
-        element = self.wait_for_presence(locator)
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
-        self.driver.execute_script("arguments[0].click();", element)
 
     def wait_for_text(self, locator, text):
         """Waits for a specific text to appear in an element before proceeding"""
