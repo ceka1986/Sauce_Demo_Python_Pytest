@@ -1,6 +1,7 @@
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from utils.data import TestData
 
 
 
@@ -21,7 +22,7 @@ class CheckoutStepTwoPage(BasePage):
     def __init__(self, driver):
         """Initializes CheckoutStepTwoPage with the driver and its specific URL"""
         super().__init__(driver)
-        self.url = "https://www.saucedemo.com/checkout-step-two.html"
+        self.url = TestData.URL_CHECKOUT_STEP_TWO
 
     def _extract_price(self, locator):
         """Helper method to extract and convert price text to a float"""
@@ -57,6 +58,11 @@ class CheckoutStepTwoPage(BasePage):
         """Clicks the 'Finish' button to complete the purchase"""
         self.click(self._FINISH_BUTTON)
         self.wait.until(EC.url_contains("checkout-complete.html"))
+
+
+    def wait_for_page_load(self):
+        """Waits for the checkout summary to be fully rendered"""
+        self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test='checkout-summary-container']")))
     
 
 

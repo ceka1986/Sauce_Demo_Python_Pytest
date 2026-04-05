@@ -1,6 +1,7 @@
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from utils.data import TestData
 
 
 
@@ -20,7 +21,7 @@ class CartPage(BasePage):
    def __init__(self, driver):
         """Initializes the CartPage with the WebDriver and sets the page URL"""
         super().__init__(driver)
-        self.url = "https://www.saucedemo.com/cart.html"
+        self.url = TestData.URL_CART
    
    def get_title(self):
       """Returns the page title element"""
@@ -73,4 +74,8 @@ class CartPage(BasePage):
     """Checks if the cart badge is currently visible on the page"""
     elements = self.find_all(self._CART_BADGE)
     return len(elements) > 0
+   
+   def wait_for_page_load(self):
+     """Waits for the cart container to be fully rendered"""
+     self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test='cart-contents-container']")))
 

@@ -1,5 +1,8 @@
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from utils.data import TestData
+
 
 
 
@@ -14,7 +17,7 @@ class CheckoutCompletePage(BasePage):
     def __init__(self, driver):
         """Initializes CheckoutCompletePage with the driver and its specific URL"""
         super().__init__(driver)
-        self.url = "https://www.saucedemo.com/checkout-complete.html"
+        self.url = TestData.URL_CHECKOUT_COMPLETE
 
     
     def get_page_title(self):
@@ -32,6 +35,10 @@ class CheckoutCompletePage(BasePage):
     def click_back_home_button(self):
         """Clicks the 'Back Home' button to return to the inventory page"""
         self.click(self._BACK_HOME_BUTTON)
+
+    def wait_for_page_load(self):
+        """Waits for the order confirmation to be fully rendered"""
+        self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test='checkout-complete-container']")))
 
 
     

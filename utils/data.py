@@ -8,6 +8,16 @@ class TestData:
     VALID_PASS = "secret_sauce"
     WRONG_PASS = "wrong_pass"
 
+    # --- URLs ---
+    BASE_URL = "https://www.saucedemo.com"
+    URL_LOGIN = "https://www.saucedemo.com"
+    URL_INVENTORY = "https://www.saucedemo.com/inventory.html"
+    URL_CART = "https://www.saucedemo.com/cart.html"
+    URL_CHECKOUT_STEP_ONE = "https://www.saucedemo.com/checkout-step-one.html"
+    URL_CHECKOUT_STEP_TWO = "https://www.saucedemo.com/checkout-step-two.html"
+    URL_CHECKOUT_COMPLETE = "https://www.saucedemo.com/checkout-complete.html"
+
+
     # --- Error Messages ---
     ERROR_REQUIRED_USER = "Epic sadface: Username is required"
     ERROR_REQUIRED_PASS = "Epic sadface: Password is required"

@@ -10,9 +10,10 @@ from utils.data import TestData
 
 class TestCheckoutFlow:
     @pytest.fixture(autouse=True)
-    def setup_checkout(self, login_page:LoginPage):
+    def setup_checkout(self, login_page: LoginPage, inventory_page: InventoryPage):
         login_page.open()
         login_page.login_with_credentials(TestData.VALID_USER, TestData.VALID_PASS)
+        inventory_page.wait_for_page_load()
 
 
     def test_complete_checkout_flow(self, inventory_page:InventoryPage, 

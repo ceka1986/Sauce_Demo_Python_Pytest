@@ -94,3 +94,5 @@ class BasePage:
         except TimeoutException:
             self.logger.error(f"Timeout: Button text '{text}' not found in element {locator}!")
             raise
+
+   

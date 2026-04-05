@@ -2,6 +2,7 @@ from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
+from utils.data import TestData
 
 
 
@@ -18,7 +19,7 @@ class InventoryPage(BasePage):
     def __init__(self, driver):
         """Initializes the InventoryPage with the WebDriver and sets the page URL"""
         super().__init__(driver)
-        self.url = "https://www.saucedemo.com/inventory.html"
+        self.url = TestData.URL_INVENTORY
 
     def _get_dynamic_button_locator(self, item_name):
         """Generates a dynamic XPath locator for a specific item's button based on product name"""
@@ -82,4 +83,8 @@ class InventoryPage(BasePage):
         """Returns a list of all item prices as floats"""
         elements = self.find_all(self._ITEM_PRICE)
         return [float(el.text.replace('$', '')) for el in elements]
+    
+    def wait_for_page_load(self):
+        """Waits for all inventory items to be fully rendered by React"""
+        self.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "[data-test='inventory-item']")))
     

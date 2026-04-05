@@ -1,6 +1,7 @@
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from utils.data import TestData
 
 
 
@@ -21,7 +22,7 @@ class CheckoutStepOnePage(BasePage):
     def __init__(self, driver):
         """Initializes CheckoutStepOnePage with the driver and its specific URL"""
         super().__init__(driver)
-        self.url = "https://www.saucedemo.com/checkout-step-one.html"
+        self.url = TestData.URL_CHECKOUT_STEP_ONE
 
     def get_page_title(self):
         """Returns the visible text of the page title"""
@@ -62,3 +63,7 @@ class CheckoutStepOnePage(BasePage):
     def is_error_displayed(self):
         """Quickly checks if an error message is visible without waiting"""
         return len(self.find_all(self._ERROR_MESSAGE)) > 0
+    
+    def wait_for_page_load(self):
+        """Waits for the checkout form to be fully rendered"""
+        self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test='checkout-info-container']")))

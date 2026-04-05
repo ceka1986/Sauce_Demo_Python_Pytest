@@ -3,6 +3,8 @@ from pages.inventory_page import InventoryPage
 from pages.login_page import LoginPage
 import pytest
 from utils.data import TestData
+from selenium.webdriver.support import expected_conditions as EC
+
 
 
 
@@ -13,8 +15,8 @@ class TestInventory:
     def setup_inventory(self, login_page: LoginPage, inventory_page: InventoryPage, sidebar: Sidebar):
         login_page.open()
         login_page.login_with_credentials(TestData.VALID_USER, TestData.VALID_PASS)
-        sidebar.reset_app_state()
-        inventory_page.refresh_page() 
+        inventory_page.driver.get(TestData.URL_INVENTORY)
+        inventory_page.wait_for_page_load()
 
     @pytest.mark.parametrize("item_name", [TestData.BACKPACK, TestData.SHIRT_RED])
     def test_add_item_to_cart(self, inventory_page: InventoryPage, item_name):

@@ -1,5 +1,8 @@
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from utils.data import TestData
+
 
 
 class LoginPage(BasePage):
@@ -12,7 +15,7 @@ class LoginPage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
-        self.url = "https://www.saucedemo.com"
+        self.url = TestData.URL_LOGIN
 
     
     def open(self):
@@ -42,4 +45,8 @@ class LoginPage(BasePage):
     def is_at(self):
         """Checks if the browser is currently on the expected page URL"""
         return self.driver.current_url.rstrip('/') == self.url.rstrip('/')
+    
+    def wait_for_page_load(self):
+        """Waits for the login form to be fully rendered"""
+        self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test='login-container']")))
 
