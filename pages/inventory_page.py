@@ -30,15 +30,15 @@ class InventoryPage(BasePage):
         return self.get_text(self._PAGE_TITLE)
     
     def add_item_to_cart(self, item_name):
+        # Čekaj da React renderuje inventory items pre svega
+        self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test='inventory-item']")))
         locator = self._get_dynamic_button_locator(item_name)
-        self.logger.info(f"Attempting to click button for: {item_name}")
-        self.logger.info(f"Current URL before click: {self.driver.current_url}")
         self.click(locator)
-        self.logger.info(f"Click done. Current URL after click: {self.driver.current_url}")
-        self.logger.info(f"Page source snippet: {self.driver.page_source[:500]}")
         self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[id^='remove']")))
 
     def remove_item_from_cart(self, item_name):
+        # Čekaj da React renderuje inventory items pre svega
+        self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test='inventory-item']")))
         locator = self._get_dynamic_button_locator(item_name)
         self.click(locator)
         self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[id^='add-to-cart']")))
@@ -61,10 +61,8 @@ class InventoryPage(BasePage):
             return "0"
     
     def is_item_in_cart(self, item_name):
-        """Checks if the button text has changed to 'Remove' using the BasePage wait"""
-        locator = self._get_dynamic_button_locator(item_name)
         try:
-            self.wait_for_text(locator, "Remove")
+            self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[id^='remove']")))
             return True
         except:
             return False
