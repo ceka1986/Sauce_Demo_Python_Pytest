@@ -6,6 +6,7 @@ from utils.data import TestData
 
 
 
+
 class TestInventory:
 
     @pytest.fixture(autouse=True)

@@ -1,6 +1,8 @@
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support import expected_conditions as EC
+
 
 
 class InventoryPage(BasePage):
@@ -31,13 +33,13 @@ class InventoryPage(BasePage):
         """Adds a specific item to the shopping cart"""
         locator = self._get_dynamic_button_locator(item_name)
         self.click(locator)
-        self.wait_for_text(locator, "Remove")
+        self.wait_for_button_text(locator, "Remove")
         
     def remove_item_from_cart(self, item_name):
         """Removes a specific item from the shopping cart"""
         locator = self._get_dynamic_button_locator(item_name)
         self.click(locator)
-        self.wait_for_text(locator, "Add to cart")
+        self.wait_for_button_text(locator, "Add to cart")
 
     def get_button_text(self, item_name):
         """Returns the current text of the Add to Cart/Remove button for a specific item"""
@@ -45,9 +47,9 @@ class InventoryPage(BasePage):
         return self.get_text(locator)
 
     def click_cart_icon(self):
-        """Clicks on the shopping cart icon to navigate to the cart page"""
+        """Clicks the shopping cart icon and waits for navigation to the cart page"""
         self.click(self._CART_LINK)
-        self.wait_for_text(self._PAGE_TITLE, "Your Cart")
+        self.wait.until(EC.url_contains("cart.html"))
 
     def get_cart_badge_count(self):
         """Returns the number shown on the red cart badge"""
