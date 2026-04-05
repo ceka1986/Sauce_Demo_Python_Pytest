@@ -9,29 +9,25 @@ from utils.data import TestData
 class TestInventory:
 
     @pytest.fixture(autouse=True)
-    def setup_inventory(self, login_page:LoginPage, sidebar:Sidebar):
+    def setup_inventory(self, login_page: LoginPage, inventory_page: InventoryPage, sidebar: Sidebar):
         login_page.open()
         login_page.login_with_credentials(TestData.VALID_USER, TestData.VALID_PASS)
         sidebar.reset_app_state()
-        sidebar.refresh_page()
+        inventory_page.refresh_page() 
 
-    @pytest.mark.parametrize("item_name",[TestData.BACKPACK,TestData.SHIRT_RED])
-    def test_add_item_to_cart(self, inventory_page:InventoryPage,item_name):
+    @pytest.mark.parametrize("item_name", [TestData.BACKPACK, TestData.SHIRT_RED])
+    def test_add_item_to_cart(self, inventory_page: InventoryPage, item_name):
         inventory_page.add_item_to_cart(item_name)
 
         assert inventory_page.is_item_in_cart(item_name)
         assert inventory_page.get_cart_badge_count() == "1"
-        
-    
+
     def test_remove_item_from_cart(self, inventory_page: InventoryPage):
         item = TestData.BACKPACK
         inventory_page.add_item_to_cart(item)
         inventory_page.remove_item_from_cart(item)
 
-        locator = inventory_page._get_dynamic_button_locator(item)
-        actual_text = inventory_page.get_text(locator)
-
-        assert actual_text == "Add to cart"
+        assert inventory_page.get_button_text(item) == "Add to cart"  
         
 
     @pytest.mark.parametrize("sort_option, reverse", [
