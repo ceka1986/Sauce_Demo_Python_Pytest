@@ -78,6 +78,19 @@ class BasePage:
             self.logger.error(f"Timeout: Text '{text}' not found in element {locator}!")
             raise
 
-    def wait_for_presence(self, locator):
-        """Waits only for the element to exist in the DOM"""
-        return self.wait.until(EC.presence_of_element_located(locator))
+    
+    def wait_for_button_text(self, locator, text):
+        """Waits until the button element contains the expected text,
+        Uses 'innerText' attribute instead of '.text' property,
+        which is more reliable for button elements in headless Chrome on Linux"""
+    
+        def check_button_text(driver):
+            element = driver.find_element(*locator)
+            button_text = element.get_attribute("innerText") or ""
+            return text in button_text
+        
+        try:
+            return self.wait.until(check_button_text)
+        except TimeoutException:
+            self.logger.error(f"Timeout: Button text '{text}' not found in element {locator}!")
+            raise
