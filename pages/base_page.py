@@ -32,13 +32,13 @@ class BasePage:
 
     def click(self, locator):
         """
-        Attempts a standard Selenium click. 
-        Falls back to JavaScript click if the element is intercepted or hidden.
+        Attempts a standard Selenium click.
+        Always falls back to JavaScript click as a safety measure for headless Chrome.
         """
         try:
             element = self.wait.until(EC.element_to_be_clickable(locator))
             element.click()
-        except (ElementClickInterceptedException, TimeoutException):
+        except Exception:
             self.logger.warning(f"Standard click failed for {locator}. Falling back to JS click.")
             self.js_click(locator)
 
