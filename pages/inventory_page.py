@@ -30,16 +30,18 @@ class InventoryPage(BasePage):
         return self.get_text(self._PAGE_TITLE)
     
     def add_item_to_cart(self, item_name):
-        """Adds a specific item to the shopping cart"""
         locator = self._get_dynamic_button_locator(item_name)
         self.click(locator)
-        self.wait_for_button_text(locator, "Remove")
         
+        remove_locator = (By.XPATH, f"//div[@data-test='inventory-item'][descendant::div[normalize-space()='{item_name}']]//button[contains(@id,'remove')]")
+        self.wait.until(EC.presence_of_element_located(remove_locator))
+
     def remove_item_from_cart(self, item_name):
-        """Removes a specific item from the shopping cart"""
         locator = self._get_dynamic_button_locator(item_name)
         self.click(locator)
-        self.wait_for_button_text(locator, "Add to cart")
+        
+        add_locator = (By.XPATH, f"//div[@data-test='inventory-item'][descendant::div[normalize-space()='{item_name}']]//button[contains(@id,'add-to-cart')]")
+        self.wait.until(EC.presence_of_element_located(add_locator))
 
     def get_button_text(self, item_name):
         """Returns the current text of the Add to Cart/Remove button for a specific item"""
