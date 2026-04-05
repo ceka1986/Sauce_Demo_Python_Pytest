@@ -31,7 +31,11 @@ class InventoryPage(BasePage):
     
     def add_item_to_cart(self, item_name):
         locator = self._get_dynamic_button_locator(item_name)
+        self.logger.info(f"Attempting to click button for: {item_name}")
+        self.logger.info(f"Current URL before click: {self.driver.current_url}")
         self.click(locator)
+        self.logger.info(f"Click done. Current URL after click: {self.driver.current_url}")
+        self.logger.info(f"Page source snippet: {self.driver.page_source[:500]}")
         self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[id^='remove']")))
 
     def remove_item_from_cart(self, item_name):
