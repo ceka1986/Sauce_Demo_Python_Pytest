@@ -14,8 +14,6 @@ class InventoryPage(BasePage):
     _INVENTORY_ITEMS = (By.CSS_SELECTOR, "[data-test='inventory-item']")
     _ITEM_NAME = (By.CSS_SELECTOR, "[data-test='inventory-item-name']")
     _ITEM_PRICE = (By.CSS_SELECTOR, "[data-test='inventory-item-price']")
-
-    # These use data-test which is stable and doesn't rely on text rendering
     _ADD_TO_CART_BUTTON = (By.CSS_SELECTOR, "[data-test^='add-to-cart']")
     _REMOVE_BUTTON = (By.CSS_SELECTOR, "[data-test^='remove']")
 
@@ -30,14 +28,12 @@ class InventoryPage(BasePage):
 
     def _get_add_button_locator(self, item_name):
         """Returns the data-test locator for the Add to Cart button of a specific item"""
-        # SauceDemo uses predictable data-test values based on item name
-        # e.g. "Sauce Labs Backpack" -> "add-to-cart-sauce-labs-backpack"
-        key = item_name.lower().replace(" ", "-").replace(".", "").replace("(", "").replace(")", "")
+        key = item_name.lower().replace(" ", "-")
         return (By.CSS_SELECTOR, f"[data-test='add-to-cart-{key}']")
 
     def _get_remove_button_locator(self, item_name):
         """Returns the data-test locator for the Remove button of a specific item"""
-        key = item_name.lower().replace(" ", "-").replace(".", "").replace("(", "").replace(")", "")
+        key = item_name.lower().replace(" ", "-")
         return (By.CSS_SELECTOR, f"[data-test='remove-{key}']")
 
     def get_title(self):
@@ -69,7 +65,7 @@ class InventoryPage(BasePage):
         except Exception:
             return "Add to cart"
 
-    def is_item_in_cart(self, item_name) -> bool:
+    def is_item_in_cart(self, item_name):
         """Returns True if the item's Remove button is present in the DOM"""
         remove_locator = self._get_remove_button_locator(item_name)
         return len(self.driver.find_elements(*remove_locator)) > 0
