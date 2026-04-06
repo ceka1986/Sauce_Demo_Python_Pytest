@@ -95,4 +95,11 @@ class BasePage:
             self.logger.error(f"Timeout: Button text '{text}' not found in element {locator}!")
             raise
 
-   
+    def wait_for_url(self, url_part):
+        """Waits for the current URL to contain the given string"""
+        try:
+            self.wait.until(EC.url_contains(url_part))
+        except TimeoutException:
+            self.logger.error(f"Timeout: URL did not contain '{url_part}'! Current URL: {self.driver.current_url}")
+            raise
+ 
