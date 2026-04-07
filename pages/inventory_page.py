@@ -28,12 +28,12 @@ class InventoryPage(BasePage):
 
     def _get_add_button_locator(self, item_name):
         """Returns the data-test locator for the Add to Cart button of a specific item"""
-        key = item_name.lower().replace(" ", "-").replace("(", "").replace(")", "")
+        key = item_name.lower().replace(" ", "-")
         return (By.CSS_SELECTOR, f"[data-test='add-to-cart-{key}']")
 
     def _get_remove_button_locator(self, item_name):
         """Returns the data-test locator for the Remove button of a specific item"""
-        key = item_name.lower().replace(" ", "-").replace("(", "").replace(")", "")
+        key = item_name.lower().replace(" ", "-")
         return (By.CSS_SELECTOR, f"[data-test='remove-{key}']")
 
     def get_title(self):
@@ -46,15 +46,19 @@ class InventoryPage(BasePage):
         remove_locator = self._get_remove_button_locator(item_name)
         self.click(add_locator)
         # Wait for Remove button to appear — confirms item was added
-        self.wait.until(EC.presence_of_element_located(remove_locator))
+        return self.wait.until(EC.presence_of_element_located(remove_locator))
 
     def remove_item_from_cart(self, item_name):
         """Removes a specific item from the cart and waits for confirmation"""
         remove_locator = self._get_remove_button_locator(item_name)
         add_locator = self._get_add_button_locator(item_name)
+
+        element = self.wait.until(EC.presence_of_element_located(remove_locator))
+        self.driver.execute_script("arguments[0].scrollIntoView();", element)
+
         self.click(remove_locator)
         # Wait for Add to Cart button to appear — confirms item was removed
-        self.wait.until(EC.presence_of_element_located(add_locator))
+        return self.wait.until(EC.presence_of_element_located(add_locator))
 
     def get_button_text(self, item_name):
         """Returns the current text of the cart button for a specific item"""
@@ -73,7 +77,7 @@ class InventoryPage(BasePage):
     def click_cart_icon(self):
         """Clicks the shopping cart icon and waits for navigation to cart page"""
         self.click(self._CART_LINK)
-        self.wait_for_url("cart.html")
+        return self.wait_for_url("cart.html")
 
     def get_cart_badge_count(self):
         """Returns the number shown on the cart badge, or '0' if not visible"""
