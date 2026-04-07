@@ -52,7 +52,7 @@ class InventoryPage(BasePage):
         """Removes a specific item from the cart and waits for confirmation"""
         remove_locator = self._get_remove_button_locator(item_name)
         add_locator = self._get_add_button_locator(item_name)
-        self.click(remove_locator)
+        self.js_click(remove_locator)
         # Wait for Add to Cart button to appear — confirms item was removed
         return self.wait.until(EC.presence_of_element_located(add_locator))
 
