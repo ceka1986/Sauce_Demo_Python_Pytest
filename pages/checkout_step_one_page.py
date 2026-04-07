@@ -28,41 +28,44 @@ class CheckoutStepOnePage(BasePage):
         """Returns the visible text of the page title"""
         return self.get_text(self._PAGE_TITLE)
     
+    def _force_input(self, locator, text):
+        """Forces text into a field and verifies it stays there despite React state resets"""
+        element = self.wait.until(EC.element_to_be_clickable(locator))
+        
+        # Try up to 3 times to make the value stick
+        for _ in range(3):
+            element.click()
+            element.clear()
+            # Standard type
+            element.send_keys(text)
+            # JS Force + Event Dispatch
+            self.driver.execute_script(
+                "arguments[0].value = arguments[1];"
+                "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));"
+                "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
+                element, text
+            )
+            if element.get_attribute("value") == text:
+                break
+
     def enter_first_name(self, first_name):
-        """Clicks, clears, types and VERIFIES the input because CI is flaky"""
-        element = self.wait.until(EC.element_to_be_clickable(self._FIRST_NAME_FIELD))
-        
-        # 1. Prvo kliknemo da dobije fokus
-        element.click()
-        
-        # 2. Čistimo i kucamo
-        element.clear()
-        element.send_keys(first_name)
-        
-        # 3. PROVERA: Ako je polje i dalje prazno, koristimo JS kao backup
-        if element.get_attribute("value") == "":
-            self.driver.execute_script("arguments[0].value = arguments[1];", element, first_name)
-            self.driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element)
+        """Forces first name entry"""
+        self._force_input(self._FIRST_NAME_FIELD, first_name)
 
     def enter_last_name(self, last_name):
-        """Ensures last name is actually entered"""
-        element = self.find(self._LAST_NAME_FIELD)
-        element.click()
-        element.clear()
-        element.send_keys(last_name)
-        if element.get_attribute("value") == "":
-            self.driver.execute_script("arguments[0].value = arguments[1];", element, last_name)
-            self.driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element)
+        """Forces last name entry"""
+        self._force_input(self._LAST_NAME_FIELD, last_name)
 
     def enter_postal_code(self, postal_code):
-        """Ensures postal code is actually entered"""
-        element = self.find(self._ZIP_POSTAL_CODE_FIELD)
-        element.click()
-        element.clear()
-        element.send_keys(postal_code)
-        if element.get_attribute("value") == "":
-            self.driver.execute_script("arguments[0].value = arguments[1];", element, postal_code)
-            self.driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element)
+        """Forces postal code entry"""
+        self._force_input(self._ZIP_POSTAL_CODE_FIELD, postal_code)
+
+    def click_on_continue_button(self):
+        """Final click with a small pause to ensure state is saved"""
+        import time
+        time.sleep(1) # Crucial for React to 'save' the forced JS state on slow CI
+        self.driver.execute_script("document.getElementById('continue').click();")
+        return self.wait.until(EC.url_contains("checkout-step-two.html"))
 
     def fill_in_the_form(self, first_name, last_name, postal_code):
         """Fills out the entire checkout form using the provided data"""
@@ -70,20 +73,20 @@ class CheckoutStepOnePage(BasePage):
         self.enter_last_name(last_name)
         self.enter_postal_code(postal_code)
 
-    def click_on_continue_button(self):
-        """
-        Clicks the 'Continue' button using a direct ID-based JavaScript call.
-        This bypasses standard Selenium click issues on <input type="submit"> 
-        elements in headless CI environments.
-        """
-        # Ensure the button is present in the DOM
-        self.wait.until(EC.presence_of_element_located(self._CONTINUE_BUTTON))
+    # def click_on_continue_button(self):
+    #     """
+    #     Clicks the 'Continue' button using a direct ID-based JavaScript call.
+    #     This bypasses standard Selenium click issues on <input type="submit"> 
+    #     elements in headless CI environments.
+    #     """
+    #     # Ensure the button is present in the DOM
+    #     self.wait.until(EC.presence_of_element_located(self._CONTINUE_BUTTON))
         
-        # Direct JS click on the ID 'continue' as seen in the HTML
-        self.driver.execute_script("document.getElementById('continue').click();")
+    #     # Direct JS click on the ID 'continue' as seen in the HTML
+    #     self.driver.execute_script("document.getElementById('continue').click();")
         
-        # Explicitly wait for the URL to change to the next step
-        return self.wait.until(EC.url_contains("checkout-step-two.html"))
+    #     # Explicitly wait for the URL to change to the next step
+    #     return self.wait.until(EC.url_contains("checkout-step-two.html"))
         
 
     def click_on_cancel_button(self):
