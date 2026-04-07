@@ -32,14 +32,30 @@ class BasePage:
 
     def click(self, locator):
         """
-        Attempts a standard Selenium click.
-        Always falls back to JavaScript click as a safety measure for headless Chrome.
+        An enhanced click method designed for CI stability.
+        1. Waits for presence.
+        2. Scrolls the element into the center of the viewport.
+        3. Waits for clickability.
+        4. Attempts a standard click with a JS fallback.
         """
         try:
+            # Step 1: Wait for the element to exist in the DOM
+            element = self.wait.until(EC.presence_of_element_located(locator))
+            
+            # Step 2: Explicitly scroll the element to the center of the screen.
+            # This is crucial for Headless Chrome on Linux to avoid 'Element not interactable'.
+            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+            
+            # Step 3: Ensure the element is actually clickable (visible and enabled)
             element = self.wait.until(EC.element_to_be_clickable(locator))
+            
+            # Step 4: Perform the standard Selenium click
             element.click()
-        except Exception:
-            self.logger.warning(f"Standard click failed for {locator}. Falling back to JS click.")
+            self.logger.info(f"Successfully clicked on element: {locator}")
+            
+        except Exception as e:
+            # Fallback: If standard click is intercepted or fails due to CI lag, use JavaScript click.
+            self.logger.warning(f"Standard click failed for {locator}. Attempting JS click fallback. Error: {e}")
             self.js_click(locator)
 
     def js_click(self, locator):

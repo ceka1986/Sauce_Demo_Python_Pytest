@@ -44,6 +44,10 @@ class InventoryPage(BasePage):
         """Adds a specific item to the cart and waits for confirmation"""
         add_locator = self._get_add_button_locator(item_name)
         remove_locator = self._get_remove_button_locator(item_name)
+
+        element = self.wait.until(EC.presence_of_element_located(remove_locator))
+        self.driver.execute_script("arguments[0].scrollIntoView();", element)
+        
         self.click(add_locator)
         # Wait for Remove button to appear — confirms item was added
         return self.wait.until(EC.presence_of_element_located(remove_locator))
