@@ -54,14 +54,18 @@ class CheckoutStepOnePage(BasePage):
         self.enter_postal_code(postal_code)
 
     def click_on_continue_button(self):
-        """Triggers the form submission directly to bypass UI-related click failures on CI"""
-        # Ensure the button is at least present before attempting to submit the form
+        """
+        Clicks the 'Continue' button using a direct ID-based JavaScript call.
+        This bypasses standard Selenium click issues on <input type="submit"> 
+        elements in headless CI environments.
+        """
+        # Ensure the button is present in the DOM
         self.wait.until(EC.presence_of_element_located(self._CONTINUE_BUTTON))
         
-        # Nuclear option: Find the parent form and submit it directly
-        self.driver.execute_script("document.querySelector('form').submit();")
+        # Direct JS click on the ID 'continue' as seen in the HTML
+        self.driver.execute_script("document.getElementById('continue').click();")
         
-        # Verify navigation to the next step
+        # Explicitly wait for the URL to change to the next step
         return self.wait.until(EC.url_contains("checkout-step-two.html"))
         
 
