@@ -61,10 +61,22 @@ class CheckoutStepOnePage(BasePage):
         self._force_input(self._ZIP_POSTAL_CODE_FIELD, postal_code)
 
     def click_on_continue_button(self):
-        """Final click with a small pause to ensure state is saved"""
-        import time
-        time.sleep(1) # Crucial for React to 'save' the forced JS state on slow CI
+        """Attempts multiple click strategies to ensure navigation triggers"""
+        btn = self.wait.until(EC.element_to_be_clickable(self._CONTINUE_BUTTON))
+        
+        # 1. Standardni Selenium klik
+        try:
+            btn.click()
+        except:
+            pass
+            
+        # 2. JavaScript klik preko elementa
+        self.driver.execute_script("arguments[0].click();", btn)
+        
+        # 3. JavaScript klik direktno preko ID-ja (najsigurnija opcija)
         self.driver.execute_script("document.getElementById('continue').click();")
+        
+        # Čekamo prelazak
         return self.wait.until(EC.url_contains("checkout-step-two.html"))
 
     def fill_in_the_form(self, first_name, last_name, postal_code):
