@@ -29,16 +29,23 @@ class CheckoutStepOnePage(BasePage):
         return self.get_text(self._PAGE_TITLE)
     
     def enter_first_name(self, first_name):
-        """Enters the provided string into the First Name field"""
-        self.type(self._FIRST_NAME_FIELD, first_name)
+        """Sets the first name value directly via JS to ensure it's registered"""
+        element = self.find(self._FIRST_NAME_FIELD)
+        self.driver.execute_script("arguments[0].value = arguments[1];", element, first_name)
+        # Okidamo 'change' event da React zna da se nešto desilo
+        self.driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", element)
 
     def enter_last_name(self, last_name):
-        """Enters the provided string into the Last Name field"""
-        self.type(self._LAST_NAME_FIELD, last_name)
+        """Sets the last name value directly via JS"""
+        element = self.find(self._LAST_NAME_FIELD)
+        self.driver.execute_script("arguments[0].value = arguments[1];", element, last_name)
+        self.driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", element)
 
     def enter_postal_code(self, postal_code):
-        """Enters the provided string into the Postal Code field"""
-        self.type(self._ZIP_POSTAL_CODE_FIELD, postal_code)
+        """Sets the postal code value directly via JS"""
+        element = self.find(self._ZIP_POSTAL_CODE_FIELD)
+        self.driver.execute_script("arguments[0].value = arguments[1];", element, postal_code)
+        self.driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", element)
 
     def fill_in_the_form(self, first_name, last_name, postal_code):
         """Fills out the entire checkout form using the provided data"""
