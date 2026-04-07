@@ -12,11 +12,12 @@ from selenium.webdriver.support import expected_conditions as EC
 class TestInventory:
 
     @pytest.fixture(autouse=True)
-    def setup_inventory(self, login_page: LoginPage, inventory_page: InventoryPage, sidebar: Sidebar):
-        login_page.open()
-        login_page.login_with_credentials(TestData.VALID_USER, TestData.VALID_PASS)
-        inventory_page.driver.get(TestData.URL_INVENTORY)
-        inventory_page.wait_for_page_load()
+    def setup_inventory(self, logged_in_session):
+        """
+        By including 'logged_in_session' as a parameter, 
+        Pytest automatically handles both login and cleanup.
+        """
+        pass
 
     @pytest.mark.parametrize("item_name", [TestData.BACKPACK, TestData.SHIRT_RED])
     def test_add_item_to_cart(self, inventory_page: InventoryPage, item_name):

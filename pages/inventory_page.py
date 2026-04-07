@@ -28,12 +28,12 @@ class InventoryPage(BasePage):
 
     def _get_add_button_locator(self, item_name):
         """Returns the data-test locator for the Add to Cart button of a specific item"""
-        key = item_name.lower().replace(" ", "-")
+        key = item_name.lower().replace(" ", "-").replace("(", "").replace(")", "")
         return (By.CSS_SELECTOR, f"[data-test='add-to-cart-{key}']")
 
     def _get_remove_button_locator(self, item_name):
         """Returns the data-test locator for the Remove button of a specific item"""
-        key = item_name.lower().replace(" ", "-")
+        key = item_name.lower().replace(" ", "-").replace("(", "").replace(")", "")
         return (By.CSS_SELECTOR, f"[data-test='remove-{key}']")
 
     def get_title(self):

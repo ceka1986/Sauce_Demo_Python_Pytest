@@ -102,4 +102,8 @@ class BasePage:
         except TimeoutException:
             self.logger.error(f"Timeout: URL did not contain '{url_part}'! Current URL: {self.driver.current_url}")
             raise
+
+    def clear_session(self):
+        self.driver.delete_all_cookies()
+        self.driver.execute_script("window.localStorage.clear(); window.sessionStorage.clear();")
  

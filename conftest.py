@@ -12,6 +12,7 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from utils.data import TestData
 from webdriver_manager.chrome import ChromeDriverManager
 
 
@@ -33,6 +34,28 @@ def driver():
     
     yield driver
     driver.quit()
+
+@pytest.fixture
+def logged_in_session(login_page, inventory_page):
+    """
+    Fixture to perform a valid login and ensure a clean session for inventory-based tests.
+    This fixture handles the full login flow, waits for the inventory page to load,
+    and performs a session cleanup (teardown) after each test execution to ensure
+    test isolation and prevent data leakage between tests
+    """
+
+    login_page.open()
+    login_page.login_with_credentials(TestData.VALID_USER, TestData.VALID_PASS)
+    
+    inventory_page.wait_for_page_load()
+    
+    yield  
+    
+    try:
+        inventory_page.clear_session()
+    except Exception as e:
+        # Logging any teardown issues without failing the actual test report
+        inventory_page.logger.warning(f"Teardown failed to clear session: {e}")
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
