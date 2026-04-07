@@ -47,7 +47,8 @@ class CheckoutStepOnePage(BasePage):
         self.enter_postal_code(postal_code)
 
     def click_on_continue_button(self):
-        """Clicks the 'Continue' button to proceed to the next step"""
+        """Clicks the 'Continue' button to proceed to the next step, only after ensuring form is not empty"""
+        self.wait.until(lambda d: d.find_element(*self._ZIP_POSTAL_CODE_FIELD).get_attribute("value") != "")
         self.js_click(self._CONTINUE_BUTTON)
         return self.wait.until(EC.url_contains("checkout-step-two.html"))
         
