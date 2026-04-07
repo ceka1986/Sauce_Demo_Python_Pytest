@@ -29,23 +29,40 @@ class CheckoutStepOnePage(BasePage):
         return self.get_text(self._PAGE_TITLE)
     
     def enter_first_name(self, first_name):
-        """Sets the first name value directly via JS to ensure it's registered"""
-        element = self.find(self._FIRST_NAME_FIELD)
-        self.driver.execute_script("arguments[0].value = arguments[1];", element, first_name)
-        # Okidamo 'change' event da React zna da se nešto desilo
-        self.driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", element)
+        """Clicks, clears, types and VERIFIES the input because CI is flaky"""
+        element = self.wait.until(EC.element_to_be_clickable(self._FIRST_NAME_FIELD))
+        
+        # 1. Prvo kliknemo da dobije fokus
+        element.click()
+        
+        # 2. Čistimo i kucamo
+        element.clear()
+        element.send_keys(first_name)
+        
+        # 3. PROVERA: Ako je polje i dalje prazno, koristimo JS kao backup
+        if element.get_attribute("value") == "":
+            self.driver.execute_script("arguments[0].value = arguments[1];", element, first_name)
+            self.driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element)
 
     def enter_last_name(self, last_name):
-        """Sets the last name value directly via JS"""
+        """Ensures last name is actually entered"""
         element = self.find(self._LAST_NAME_FIELD)
-        self.driver.execute_script("arguments[0].value = arguments[1];", element, last_name)
-        self.driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", element)
+        element.click()
+        element.clear()
+        element.send_keys(last_name)
+        if element.get_attribute("value") == "":
+            self.driver.execute_script("arguments[0].value = arguments[1];", element, last_name)
+            self.driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element)
 
     def enter_postal_code(self, postal_code):
-        """Sets the postal code value directly via JS"""
+        """Ensures postal code is actually entered"""
         element = self.find(self._ZIP_POSTAL_CODE_FIELD)
-        self.driver.execute_script("arguments[0].value = arguments[1];", element, postal_code)
-        self.driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", element)
+        element.click()
+        element.clear()
+        element.send_keys(postal_code)
+        if element.get_attribute("value") == "":
+            self.driver.execute_script("arguments[0].value = arguments[1];", element, postal_code)
+            self.driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element)
 
     def fill_in_the_form(self, first_name, last_name, postal_code):
         """Fills out the entire checkout form using the provided data"""
