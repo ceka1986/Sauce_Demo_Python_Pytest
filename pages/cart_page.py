@@ -35,7 +35,7 @@ class CartPage(BasePage):
       """Clicks the 'Checkout' button to proceed to the information entry page"""
       self.wait_for_text(self._PAGE_TITLE, "Your Cart")
       self.click(self._CHECKOUT_BUTTON)
-      self.wait.until(EC.url_contains("checkout-step-one.html"))
+      return self.wait.until(EC.url_contains("checkout-step-one.html"))
    
    def _get_item_container(self, item_name):
         """Finds and returns the container element for a specific product by name"""

@@ -49,7 +49,7 @@ class CheckoutStepOnePage(BasePage):
     def click_on_continue_button(self):
         """Clicks the 'Continue' button to proceed to the next step"""
         self.click(self._CONTINUE_BUTTON)
-        self.wait.until(EC.url_contains("checkout-step-two.html"))
+        return self.wait.until(EC.url_contains("checkout-step-two.html"))
         
 
     def click_on_cancel_button(self):
