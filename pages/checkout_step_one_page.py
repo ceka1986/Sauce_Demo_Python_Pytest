@@ -30,7 +30,7 @@ class CheckoutStepOnePage(BasePage):
     
     def _force_input(self, locator, text):
         """Forces text into a field and verifies it stays there despite React state resets"""
-        element = self.wait.until(EC.element_to_be_clickable(locator))
+        element = self.wait.until(EC.visibility_of_element_located(locator))
         
         # Try up to 3 times to make the value stick
         for _ in range(3):
