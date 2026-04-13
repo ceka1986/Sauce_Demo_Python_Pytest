@@ -2,6 +2,7 @@ from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from utils.data import TestData
+import time
 
 
 
@@ -42,26 +43,31 @@ class CheckoutStepOnePage(BasePage):
     #         el.dispatchEvent(new Event('blur', { bubbles: true }));
     #     """, element, text)
 
+    import time
+
     def enter_first_name(self, first_name):
-        """Čeka vidljivost polja, fokusira ga klikom i unosi ime."""
         element = self.wait.until(EC.visibility_of_element_located(self._FIRST_NAME_FIELD))
         element.click()
         element.clear()
-        element.send_keys(first_name)
+        for char in first_name:
+            element.send_keys(char)
+            time.sleep(0.1)  # Mala pauza da React stigne da "svari" slovo
 
     def enter_last_name(self, last_name):
-        """Čeka vidljivost polja, fokusira ga klikom i unosi prezime."""
         element = self.wait.until(EC.visibility_of_element_located(self._LAST_NAME_FIELD))
         element.click()
         element.clear()
-        element.send_keys(last_name)
+        for char in last_name:
+            element.send_keys(char)
+            time.sleep(0.1)
 
     def enter_postal_code(self, postal_code):
-        """Čeka vidljivost polja, fokusira ga klikom i unosi poštanski broj."""
         element = self.wait.until(EC.visibility_of_element_located(self._ZIP_POSTAL_CODE_FIELD))
         element.click()
         element.clear()
-        element.send_keys(postal_code)
+        for char in postal_code:
+            element.send_keys(char)
+            time.sleep(0.1)
 
     def click_on_continue_button(self):
         """Attempts multiple click strategies to ensure navigation triggers"""
