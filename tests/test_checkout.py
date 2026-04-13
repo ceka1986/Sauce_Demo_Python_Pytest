@@ -25,9 +25,7 @@ class TestCheckoutFlow:
         inventory_page.add_item_to_cart(TestData.BACKPACK)
         inventory_page.click_cart_icon()
         cart_page.click_checkout()
-        checkout_step_one_page.enter_first_name(TestData.FIRST_NAME)
-        checkout_step_one_page.enter_last_name(TestData.LAST_NAME)
-        checkout_step_one_page.enter_postal_code(TestData.POSTAL_CODE)
+        checkout_step_one_page.fill_in_the_form(TestData.FIRST_NAME, TestData.LAST_NAME, TestData.POSTAL_CODE)
         checkout_step_one_page.click_on_continue_button()
         checkout_step_two_page.click_finish_button()
 

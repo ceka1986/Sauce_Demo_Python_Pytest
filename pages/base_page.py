@@ -70,6 +70,7 @@ class BasePage:
     def type(self, locator, text):
         """Finds an element, clears any existing text, and types the new text"""
         element = self.find(locator)
+        element.click()
         element.clear()
         element.send_keys(text)
 

@@ -2,7 +2,6 @@ from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from utils.data import TestData
-import time
 
 
 
@@ -43,31 +42,14 @@ class CheckoutStepOnePage(BasePage):
     #         el.dispatchEvent(new Event('blur', { bubbles: true }));
     #     """, element, text)
 
-    import time
-
     def enter_first_name(self, first_name):
-        element = self.wait.until(EC.visibility_of_element_located(self._FIRST_NAME_FIELD))
-        element.click()
-        element.clear()
-        for char in first_name:
-            element.send_keys(char)
-            time.sleep(0.1)  # Mala pauza da React stigne da "svari" slovo
+        self.type(self._FIRST_NAME_FIELD, first_name)
 
     def enter_last_name(self, last_name):
-        element = self.wait.until(EC.visibility_of_element_located(self._LAST_NAME_FIELD))
-        element.click()
-        element.clear()
-        for char in last_name:
-            element.send_keys(char)
-            time.sleep(0.1)
+        self.type(self._LAST_NAME_FIELD, last_name)
 
     def enter_postal_code(self, postal_code):
-        element = self.wait.until(EC.visibility_of_element_located(self._ZIP_POSTAL_CODE_FIELD))
-        element.click()
-        element.clear()
-        for char in postal_code:
-            element.send_keys(char)
-            time.sleep(0.1)
+        self.type(self._ZIP_POSTAL_CODE_FIELD, postal_code)
 
     def click_on_continue_button(self):
         """Attempts multiple click strategies to ensure navigation triggers"""
