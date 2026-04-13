@@ -68,7 +68,7 @@ class CheckoutStepOnePage(BasePage):
         self.driver.execute_script("document.getElementById('continue').click();")
         
         # Čekamo prelazak
-        return self.wait.until(EC.url_contains("checkout-step-two.html"))
+        return self.wait_for_url("checkout-step-two.html")
 
     def fill_in_the_form(self, first_name, last_name, postal_code):
         """Fills out the entire checkout form using the provided data"""
