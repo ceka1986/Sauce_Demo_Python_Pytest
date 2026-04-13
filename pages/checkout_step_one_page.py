@@ -51,24 +51,24 @@ class CheckoutStepOnePage(BasePage):
     def enter_postal_code(self, postal_code):
         self.type(self._ZIP_POSTAL_CODE_FIELD, postal_code)
 
-    # def click_on_continue_button(self):
-    #     """Attempts multiple click strategies to ensure navigation triggers"""
-    #     btn = self.wait.until(EC.element_to_be_clickable(self._CONTINUE_BUTTON))
+    def click_on_continue_button(self):
+        """Attempts multiple click strategies to ensure navigation triggers"""
+        btn = self.wait.until(EC.element_to_be_clickable(self._CONTINUE_BUTTON))
         
-    #     # 1. Standardni Selenium klik
-    #     try:
-    #         btn.click()
-    #     except:
-    #         pass
+        # 1. Standardni Selenium klik
+        try:
+            btn.click()
+        except:
+            pass
             
-    #     # 2. JavaScript klik preko elementa
-    #     self.driver.execute_script("arguments[0].click();", btn)
+        # 2. JavaScript klik preko elementa
+        self.driver.execute_script("arguments[0].click();", btn)
         
-    #     # 3. JavaScript klik direktno preko ID-ja (najsigurnija opcija)
-    #     self.driver.execute_script("document.getElementById('continue').click();")
+        # 3. JavaScript klik direktno preko ID-ja (najsigurnija opcija)
+        self.driver.execute_script("document.getElementById('continue').click();")
         
-    #     # Čekamo prelazak
-    #     return self.wait.until(EC.url_contains("checkout-step-two.html"))
+        # Čekamo prelazak
+        return self.wait.until(EC.url_contains("checkout-step-two.html"))
 
     def fill_in_the_form(self, first_name, last_name, postal_code):
         """Fills out the entire checkout form using the provided data"""
@@ -76,17 +76,17 @@ class CheckoutStepOnePage(BasePage):
         self.enter_last_name(last_name)
         self.enter_postal_code(postal_code)
 
-    def click_on_continue_button(self):
-        """
-        Clicks the 'Continue' button using a direct ID-based JavaScript call.
-        This bypasses standard Selenium click issues on <input type="submit"> 
-        elements in headless CI environments.
-        """
-        # Ensure the button is present in the DOM
-        self.wait.until(EC.presence_of_element_located(self._CONTINUE_BUTTON))
+    # def click_on_continue_button(self):
+    #     """
+    #     Clicks the 'Continue' button using a direct ID-based JavaScript call.
+    #     This bypasses standard Selenium click issues on <input type="submit"> 
+    #     elements in headless CI environments.
+    #     """
+    #     # Ensure the button is present in the DOM
+    #     self.wait.until(EC.presence_of_element_located(self._CONTINUE_BUTTON))
         
-        # Explicitly wait for the URL to change to the next step
-        return self.wait.until(EC.url_contains("checkout-step-two.html"))
+    #     # Explicitly wait for the URL to change to the next step
+    #     return self.wait.until(EC.url_contains("checkout-step-two.html"))
         
 
     def click_on_cancel_button(self):
