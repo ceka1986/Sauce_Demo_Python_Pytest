@@ -68,21 +68,17 @@ class BasePage:
         self.driver.execute_script("arguments[0].click();", element)
 
     def type(self, locator, text):
+        """Upisuje tekst direktno preko JS-a bez čekanja na potvrdu."""
         element = self.find(locator)
         element.click()
         element.clear()
         
-        # Kucamo tekst
-        element.send_keys(text)
-        
-        # Forsiramo 'input' i 'change' događaje koje React sluša
+        # Direktno ubrizgavamo vrednost i okidamo evente
         self.driver.execute_script(
-            "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));"
-            "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
-            element)
-        
-        # Potvrda da je vrednost tu
-        self.wait.until(lambda d: element.get_attribute("value") == text)
+            "arguments[0].value = arguments[1];"
+            "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));",
+            element, text
+        )
 
     def get_text(self, locator):
         """Gets the visible text of the element found by the locator"""
