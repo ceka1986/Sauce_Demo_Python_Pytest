@@ -73,6 +73,10 @@ class BasePage:
         element.click()
         element.clear()
         element.send_keys(text)
+        self.wait.until(
+        lambda driver: element.get_attribute("value") == text,
+        message=f"Tekst '{text}' nije uspešno unet u polje {locator}"
+    )
 
     def get_text(self, locator):
         """Gets the visible text of the element found by the locator"""
