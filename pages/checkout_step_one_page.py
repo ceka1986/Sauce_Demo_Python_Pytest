@@ -28,31 +28,40 @@ class CheckoutStepOnePage(BasePage):
         """Returns the visible text of the page title"""
         return self.get_text(self._PAGE_TITLE)
     
-    def _force_input(self, locator, text):
-        """Atomic JS input to bypass headless focus issues"""
-        # Čekamo samo da polje postoji
-        element = self.wait.until(EC.presence_of_element_located(locator))
+    # def _force_input(self, locator, text):
+    #     """Atomic JS input to bypass headless focus issues"""
+    #     # Čekamo samo da polje postoji
+    #     element = self.wait.until(EC.presence_of_element_located(locator))
         
-        # Direktno upisivanje vrednosti i okidanje React događaja u jednom bloku
-        self.driver.execute_script("""
-            var el = arguments[0];
-            el.value = arguments[1];
-            el.dispatchEvent(new Event('input', { bubbles: true }));
-            el.dispatchEvent(new Event('change', { bubbles: true }));
-            el.dispatchEvent(new Event('blur', { bubbles: true }));
-        """, element, text)
+    #     # Direktno upisivanje vrednosti i okidanje React događaja u jednom bloku
+    #     self.driver.execute_script("""
+    #         var el = arguments[0];
+    #         el.value = arguments[1];
+    #         el.dispatchEvent(new Event('input', { bubbles: true }));
+    #         el.dispatchEvent(new Event('change', { bubbles: true }));
+    #         el.dispatchEvent(new Event('blur', { bubbles: true }));
+    #     """, element, text)
 
     def enter_first_name(self, first_name):
-        """Forces first name entry"""
-        self._force_input(self._FIRST_NAME_FIELD, first_name)
+        """Čeka vidljivost polja, fokusira ga klikom i unosi ime."""
+        element = self.wait.until(EC.visibility_of_element_located(self._FIRST_NAME_FIELD))
+        element.click()
+        element.clear()
+        element.send_keys(first_name)
 
     def enter_last_name(self, last_name):
-        """Forces last name entry"""
-        self._force_input(self._LAST_NAME_FIELD, last_name)
+        """Čeka vidljivost polja, fokusira ga klikom i unosi prezime."""
+        element = self.wait.until(EC.visibility_of_element_located(self._LAST_NAME_FIELD))
+        element.click()
+        element.clear()
+        element.send_keys(last_name)
 
     def enter_postal_code(self, postal_code):
-        """Forces postal code entry"""
-        self._force_input(self._ZIP_POSTAL_CODE_FIELD, postal_code)
+        """Čeka vidljivost polja, fokusira ga klikom i unosi poštanski broj."""
+        element = self.wait.until(EC.visibility_of_element_located(self._ZIP_POSTAL_CODE_FIELD))
+        element.click()
+        element.clear()
+        element.send_keys(postal_code)
 
     def click_on_continue_button(self):
         """Attempts multiple click strategies to ensure navigation triggers"""
