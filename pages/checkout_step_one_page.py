@@ -29,24 +29,18 @@ class CheckoutStepOnePage(BasePage):
         return self.get_text(self._PAGE_TITLE)
     
     def _force_input(self, locator, text):
-        """Forces text into a field and verifies it stays there despite React state resets"""
-        element = self.wait.until(EC.visibility_of_element_located(locator))
+        """Atomic JS input to bypass headless focus issues"""
+        # Čekamo samo da polje postoji
+        element = self.wait.until(EC.presence_of_element_located(locator))
         
-        # Try up to 3 times to make the value stick
-        for _ in range(3):
-            element.click()
-            element.clear()
-            # Standard type
-            element.send_keys(text)
-            # JS Force + Event Dispatch
-            self.driver.execute_script(
-                "arguments[0].value = arguments[1];"
-                "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));"
-                "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
-                element, text
-            )
-            if element.get_attribute("value") == text:
-                break
+        # Direktno upisivanje vrednosti i okidanje React događaja u jednom bloku
+        self.driver.execute_script("""
+            var el = arguments[0];
+            el.value = arguments[1];
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+            el.dispatchEvent(new Event('blur', { bubbles: true }));
+        """, element, text)
 
     def enter_first_name(self, first_name):
         """Forces first name entry"""
