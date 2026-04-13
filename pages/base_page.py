@@ -68,16 +68,19 @@ class BasePage:
         self.driver.execute_script("arguments[0].click();", element)
 
     def type(self, locator, text):
-        """Upisuje tekst direktno preko JS-a bez čekanja na potvrdu."""
+        """Kombinuje Selenium send_keys i JS dispatch za maksimalnu stabilnost."""
         element = self.find(locator)
         element.click()
         element.clear()
         
-        # Direktno ubrizgavamo vrednost i okidamo evente
+        # 1. Standardni Selenium unos (ovo popravlja Login i ostale testove)
+        element.send_keys(text)
+        
+        # 2. JS okidač (ovo popravlja Checkout na Linuxu/Reactu)
         self.driver.execute_script(
-            "arguments[0].value = arguments[1];"
-            "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));",
-            element, text
+            "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));"
+            "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
+            element
         )
 
     def get_text(self, locator):
