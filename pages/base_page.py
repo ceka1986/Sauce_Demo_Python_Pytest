@@ -70,24 +70,17 @@ class BasePage:
 
 
     def type(self, locator, text):
-        """Ultra-stabilan unos koji prisiljava React da prihvati podatke."""
+        """Čist Selenium unos bez JS-a, sa malim čekanjem da se fokusira."""
         element = self.find(locator)
         element.click()
         element.clear()
         
-        # 1. Ubrizgavamo vrednost direktno preko JS-a (ovo je najbrže)
-        self.driver.execute_script("arguments[0].value = arguments[1];", element, text)
+        # Samo kucanje
+        element.send_keys(text)
         
-        # 2. Okidamo sve moguće evente koje React može da sluša
-        self.driver.execute_script(
-            "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));"
-            "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));"
-            "arguments[0].dispatchEvent(new Event('blur', { bubbles: true }));",
-            element
-        )
-        
-        # 3. Selenium potvrda (da drajver zna da smo tu)
-        element.send_keys(Keys.TAB)
+        # Provera: Ako kucamo u prazno, pokušaj još jednom (za spori CI)
+        if element.get_attribute("value") == "" and text != "":
+            element.send_keys(text)
 
     def get_text(self, locator):
         """Gets the visible text of the element found by the locator"""

@@ -2,6 +2,7 @@ from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from utils.data import TestData
+import time
 
 
 
@@ -72,11 +73,10 @@ class CheckoutStepOnePage(BasePage):
 
     def fill_in_the_form(self, first_name, last_name, postal_code):
         """Popunjava formu sa pauzama za CI stabilnost."""
-        import time
         self.enter_first_name(first_name)
-        time.sleep(0.3) # Kratka pauza
+        
         self.enter_last_name(last_name)
-        time.sleep(0.3)
+        
         self.enter_postal_code(postal_code)
         time.sleep(0.5) # Ključna pauza pre klika na Continue
 
