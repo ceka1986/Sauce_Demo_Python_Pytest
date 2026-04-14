@@ -70,21 +70,24 @@ class BasePage:
 
 
     def type(self, locator, text):
-        """Pronalazi element, unosi tekst, šalje TAB i okida React evente."""
+        """Ultra-stabilan unos koji prisiljava React da prihvati podatke."""
         element = self.find(locator)
         element.click()
         element.clear()
         
-        # 1. Unos teksta + TAB taster
-        element.send_keys(text + Keys.TAB)
+        # 1. Ubrizgavamo vrednost direktno preko JS-a (ovo je najbrže)
+        self.driver.execute_script("arguments[0].value = arguments[1];", element, text)
         
-        # 2. JS okidači (za svaki slučaj, da budemo 100% sigurni)
+        # 2. Okidamo sve moguće evente koje React može da sluša
         self.driver.execute_script(
             "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));"
             "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));"
             "arguments[0].dispatchEvent(new Event('blur', { bubbles: true }));",
             element
         )
+        
+        # 3. Selenium potvrda (da drajver zna da smo tu)
+        element.send_keys(Keys.TAB)
 
     def get_text(self, locator):
         """Gets the visible text of the element found by the locator"""

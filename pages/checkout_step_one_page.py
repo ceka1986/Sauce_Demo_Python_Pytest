@@ -71,12 +71,14 @@ class CheckoutStepOnePage(BasePage):
     #     return self.wait_for_url("checkout-step-two.html")
 
     def fill_in_the_form(self, first_name, last_name, postal_code):
-        """Fills out the entire checkout form using the provided data"""
-        self.enter_first_name(first_name)
-        self.enter_last_name(last_name)
-        self.enter_postal_code(postal_code)
+        """Popunjava formu sa pauzama za CI stabilnost."""
         import time
-        time.sleep(0.5)
+        self.enter_first_name(first_name)
+        time.sleep(0.3) # Kratka pauza
+        self.enter_last_name(last_name)
+        time.sleep(0.3)
+        self.enter_postal_code(postal_code)
+        time.sleep(0.5) # Ključna pauza pre klika na Continue
 
     def click_on_continue_button(self):
         """
