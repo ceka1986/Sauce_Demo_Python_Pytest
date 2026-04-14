@@ -12,9 +12,9 @@ class CheckoutStepOnePage(BasePage):
 
 
     _PAGE_TITLE = (By.CSS_SELECTOR, "[data-test='title']")
-    _FIRST_NAME_FIELD = (By.ID, "first-name")
-    _LAST_NAME_FIELD = (By.ID, "last-name")
-    _ZIP_POSTAL_CODE_FIELD = (By.ID, "postal-code")
+    _FIRST_NAME_FIELD = (By.CSS_SELECTOR, "[data-test='firstName']")
+    _LAST_NAME_FIELD = (By.CSS_SELECTOR, "[data-test='lastName']")
+    _ZIP_POSTAL_CODE_FIELD = (By.CSS_SELECTOR, "[data-test='postalCode']")
     _CANCEL_BUTTON = (By.CSS_SELECTOR, "[data-test='cancel']")
     _CONTINUE_BUTTON = (By.CSS_SELECTOR, "[data-test='continue']")
 
@@ -30,89 +30,28 @@ class CheckoutStepOnePage(BasePage):
         """Returns the visible text of the page title"""
         return self.get_text(self._PAGE_TITLE)
     
-    # def _force_input(self, locator, text):
-    #     """Atomic JS input to bypass headless focus issues"""
-    #     # Čekamo samo da polje postoji
-    #     element = self.wait.until(EC.presence_of_element_located(locator))
-        
-    #     # Direktno upisivanje vrednosti i okidanje React događaja u jednom bloku
-    #     self.driver.execute_script("""
-    #         var el = arguments[0];
-    #         el.value = arguments[1];
-    #         el.dispatchEvent(new Event('input', { bubbles: true }));
-    #         el.dispatchEvent(new Event('change', { bubbles: true }));
-    #         el.dispatchEvent(new Event('blur', { bubbles: true }));
-    #     """, element, text)
-
     def enter_first_name(self, first_name):
+        """Enters the provided string into the First Name field"""
         self.type(self._FIRST_NAME_FIELD, first_name)
-        # Dodatni klik na polje nakon kucanja da potvrdimo fokus
-        self.driver.find_element(*self._FIRST_NAME_FIELD).click()
 
     def enter_last_name(self, last_name):
+        """Enters the provided string into the Last Name field"""
         self.type(self._LAST_NAME_FIELD, last_name)
-        self.driver.find_element(*self._LAST_NAME_FIELD).click()
 
     def enter_postal_code(self, postal_code):
+        """Enters the provided string into the Postal Code field"""
         self.type(self._ZIP_POSTAL_CODE_FIELD, postal_code)
-        self.driver.find_element(*self._ZIP_POSTAL_CODE_FIELD).click()
-
-    # def click_on_continue_button(self):
-    #     """Attempts multiple click strategies to ensure navigation triggers"""
-    #     btn = self.wait.until(EC.element_to_be_clickable(self._CONTINUE_BUTTON))
-        
-    #     # 1. Standardni Selenium klik
-    #     try:
-    #         btn.click()
-    #     except:
-    #         pass
-            
-    #     # 2. JavaScript klik preko elementa
-    #     self.driver.execute_script("arguments[0].click();", btn)
-        
-    #     # 3. JavaScript klik direktno preko ID-ja (najsigurnija opcija)
-    #     self.driver.execute_script("document.getElementById('continue').click();")
-        
-    #     # Čekamo prelazak
-    #     return self.wait_for_url("checkout-step-two.html")
 
     def fill_in_the_form(self, first_name, last_name, postal_code):
-        # 1. Pronađi elemente
-        el_first = self.find(self._FIRST_NAME_FIELD)
-        el_last = self.find(self._LAST_NAME_FIELD)
-        el_zip = self.find(self._ZIP_POSTAL_CODE_FIELD)
+        """Fills out the entire checkout form using the provided data"""
+        self.enter_first_name(first_name)
+        self.enter_last_name(last_name)
+        self.enter_postal_code(postal_code)
 
-        # 2. Unesi podatke sa klikom na svako polje (forsira fokus)
-        el_first.click()
-        el_first.clear()
-        el_first.send_keys(first_name)
-
-        el_last.click()
-        el_last.clear()
-        el_last.send_keys(last_name)
-
-        el_zip.click()
-        el_zip.clear()
-        el_zip.send_keys(postal_code)
+    def click_continue_button(self):
+        """Clicks the 'Continue' button to proceed to the next step"""
+        self.click(self._CONTINUE_BUTTON)
         
-        # 3. KLJUČNI DEO: Pošalji jedan "Enter" ili uradi pauzu
-        # Ovo daje React-u vremena da 'shvati' da je unos gotov
-        
-        el_zip.send_keys(Keys.ENTER)
-
-    def click_on_continue_button(self):
-        """Clicks the 'Continue' button and waits for the transition."""
-        
-        # Standardni klik
-        button = self.wait.until(EC.element_to_be_clickable(self._CONTINUE_BUTTON))
-        button.click()
-        
-        # Mala pauza da damo šansu aplikaciji da krene na sledeću stranu
-        time.sleep(1)
-        
-        return self.wait.until(EC.url_contains("checkout-step-two.html"))
-        
-
     def click_on_cancel_button(self):
         """Clicks the 'Cancel' button to return to the Cart page"""
         self.click(self._CANCEL_BUTTON)

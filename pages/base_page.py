@@ -32,32 +32,13 @@ class BasePage:
         return self.driver.find_elements(*locator)
 
     def click(self, locator):
-        """
-        An enhanced click method designed for CI stability.
-        1. Waits for presence.
-        2. Scrolls the element into the center of the viewport.
-        3. Waits for clickability.
-        4. Attempts a standard click with a JS fallback.
-        """
-        try:
-            # Step 1: Wait for the element to exist in the DOM
-            element = self.wait.until(EC.presence_of_element_located(locator))
-            
-            # Step 2: Explicitly scroll the element to the center of the screen.
-            # This is crucial for Headless Chrome on Linux to avoid 'Element not interactable'.
-            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
-            
-            # Step 3: Ensure the element is actually clickable (visible and enabled)
-            element = self.wait.until(EC.element_to_be_clickable(locator))
-            
-            # Step 4: Perform the standard Selenium click
-            element.click()
-            self.logger.info(f"Successfully clicked on element: {locator}")
-            
-        except Exception as e:
-            # Fallback: If standard click is intercepted or fails due to CI lag, use JavaScript click.
-            self.logger.warning(f"Standard click failed for {locator}. Attempting JS click fallback. Error: {e}")
-            self.js_click(locator)
+        """Waits until an element is clickable and then performs a click action"""
+        element = self.wait_for_clickable(locator)
+        element.click()
+
+    def wait_for_clickable(self, locator):
+        """Explicitly waits for an element to be in a clickable state"""
+        return self.wait.until(EC.element_to_be_clickable(locator))
 
     def js_click(self, locator):
         """
@@ -79,9 +60,6 @@ class BasePage:
         """Gets the visible text of the element found by the locator"""
         return self.find(locator).text
     
-    def wait_for_clickable(self, locator):
-        """Explicitly waits for an element to be in a clickable state"""
-        return self.wait.until(EC.element_to_be_clickable(locator))
     
     def refresh_page(self):
         """Refreshes the current browser page"""

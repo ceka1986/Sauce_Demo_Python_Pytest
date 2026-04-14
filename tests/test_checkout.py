@@ -26,7 +26,7 @@ class TestCheckoutFlow:
         inventory_page.click_cart_icon()
         cart_page.click_checkout()
         checkout_step_one_page.fill_in_the_form(TestData.FIRST_NAME, TestData.LAST_NAME, TestData.POSTAL_CODE)
-        checkout_step_one_page.click_on_continue_button()
+        checkout_step_one_page.click_continue_button()
         checkout_step_two_page.click_finish_button()
 
         assert checkout_complete_page.get_page_title() == TestData.CHECKOUT_PAGE_TITLE

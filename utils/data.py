@@ -42,8 +42,7 @@ class TestData:
         (WRONG_USER, WRONG_PASS, ERROR_WRONG_DATA),
         ("", "", ERROR_REQUIRED_USER),
         ("", VALID_PASS, ERROR_REQUIRED_USER),
-        (VALID_USER, "", ERROR_REQUIRED_PASS)
-    ]
+        (VALID_USER, "", ERROR_REQUIRED_PASS)]
 
     # --- Checkout flow data ---
     FIRST_NAME = "John"
