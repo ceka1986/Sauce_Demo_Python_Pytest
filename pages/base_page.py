@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementClickInterceptedException, TimeoutException
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.common.keys import Keys 
 
 class BasePage:
   
@@ -67,19 +68,21 @@ class BasePage:
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
         self.driver.execute_script("arguments[0].click();", element)
 
+
     def type(self, locator, text):
-        """Kombinuje Selenium send_keys i JS dispatch za maksimalnu stabilnost."""
+        """Pronalazi element, unosi tekst, šalje TAB i okida React evente."""
         element = self.find(locator)
         element.click()
         element.clear()
         
-        # 1. Standardni Selenium unos (ovo popravlja Login i ostale testove)
-        element.send_keys(text)
+        # 1. Unos teksta + TAB taster
+        element.send_keys(text + Keys.TAB)
         
-        # 2. JS okidač (ovo popravlja Checkout na Linuxu/Reactu)
+        # 2. JS okidači (za svaki slučaj, da budemo 100% sigurni)
         self.driver.execute_script(
             "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));"
-            "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
+            "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));"
+            "arguments[0].dispatchEvent(new Event('blur', { bubbles: true }));",
             element
         )
 
