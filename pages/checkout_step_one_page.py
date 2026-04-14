@@ -50,7 +50,11 @@ class CheckoutStepOnePage(BasePage):
 
     def click_continue_button(self):
         """Clicks the 'Continue' button to proceed to the next step"""
-        self.wait.until(EC.element_to_be_clickable(self._CONTINUE_BUTTON)).click()
+        button = self.wait.until(EC.element_to_be_clickable(self._CONTINUE_BUTTON))
+
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", button)
+        self.driver.execute_script("arguments[0].click();", button)
+
         self.wait.until(EC.url_contains("checkout-step-two.html"))
         
     def click_on_cancel_button(self):
