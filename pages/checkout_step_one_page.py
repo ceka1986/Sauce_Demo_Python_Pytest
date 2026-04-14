@@ -12,9 +12,9 @@ class CheckoutStepOnePage(BasePage):
 
 
     _PAGE_TITLE = (By.CSS_SELECTOR, "[data-test='title']")
-    _FIRST_NAME_FIELD = (By.CSS_SELECTOR, "[data-test='firstName']")
-    _LAST_NAME_FIELD = (By.CSS_SELECTOR, "[data-test='lastName']")
-    _ZIP_POSTAL_CODE_FIELD = (By.CSS_SELECTOR, "[data-test='postalCode']")
+    _FIRST_NAME_FIELD = (By.ID, "first-name")
+    _LAST_NAME_FIELD = (By.ID, "last-name")
+    _ZIP_POSTAL_CODE_FIELD = (By.ID, "postal-code")
     _CANCEL_BUTTON = (By.CSS_SELECTOR, "[data-test='cancel']")
     _CONTINUE_BUTTON = (By.CSS_SELECTOR, "[data-test='continue']")
 
@@ -46,12 +46,16 @@ class CheckoutStepOnePage(BasePage):
 
     def enter_first_name(self, first_name):
         self.type(self._FIRST_NAME_FIELD, first_name)
+        # Dodatni klik na polje nakon kucanja da potvrdimo fokus
+        self.driver.find_element(*self._FIRST_NAME_FIELD).click()
 
     def enter_last_name(self, last_name):
         self.type(self._LAST_NAME_FIELD, last_name)
+        self.driver.find_element(*self._LAST_NAME_FIELD).click()
 
     def enter_postal_code(self, postal_code):
         self.type(self._ZIP_POSTAL_CODE_FIELD, postal_code)
+        self.driver.find_element(*self._ZIP_POSTAL_CODE_FIELD).click()
 
     # def click_on_continue_button(self):
     #     """Attempts multiple click strategies to ensure navigation triggers"""
@@ -97,17 +101,15 @@ class CheckoutStepOnePage(BasePage):
         el_zip.send_keys(Keys.ENTER)
 
     def click_on_continue_button(self):
-        """
-        Clicks the 'Continue' button using a direct ID-based JavaScript call.
-        This bypasses standard Selenium click issues on <input type="submit"> 
-        elements in headless CI environments.
-        """
-        # Ensure the button is present in the DOM
-        button = self.wait.until(EC.presence_of_element_located(self._CONTINUE_BUTTON))
-
-        self.driver.execute_script("document.getElementById('continue').click();")
-
-        # Explicitly wait for the URL to change to the next step
+        """Clicks the 'Continue' button and waits for the transition."""
+        
+        # Standardni klik
+        button = self.wait.until(EC.element_to_be_clickable(self._CONTINUE_BUTTON))
+        button.click()
+        
+        # Mala pauza da damo šansu aplikaciji da krene na sledeću stranu
+        time.sleep(1)
+        
         return self.wait.until(EC.url_contains("checkout-step-two.html"))
         
 
