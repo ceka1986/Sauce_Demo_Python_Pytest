@@ -53,9 +53,14 @@ class BasePage:
     def type(self, locator, text):
         """Finds an element, clears existing text, and types new text"""
         element = self.wait.until(EC.element_to_be_clickable(locator))
+
         element.click()
         element.clear()
         element.send_keys(text)
+
+        self.driver.execute_script(
+            "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
+        element)
 
     def get_text(self, locator):
         """Gets the visible text of the element found by the locator"""
