@@ -67,4 +67,4 @@ class CheckoutStepOnePage(BasePage):
     
     def wait_for_page_load(self):
         """Waits for the checkout form to be fully rendered"""
-        self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test='checkout-info-container']")))
+        self.wait.until(EC.element_to_be_clickable(self._FIRST_NAME_FIELD))
