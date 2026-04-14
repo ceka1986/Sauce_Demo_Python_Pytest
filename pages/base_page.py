@@ -53,6 +53,7 @@ class BasePage:
     def type(self, locator, text):
         """Finds an element, clears existing text, and types new text"""
         element = self.wait.until(EC.element_to_be_clickable(locator))
+        element.click()
         element.clear()
         element.send_keys(text)
 
