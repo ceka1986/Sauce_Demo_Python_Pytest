@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from utils.data import TestData
 import time
+from selenium.webdriver.common.keys import Keys
 
 
 
@@ -72,13 +73,28 @@ class CheckoutStepOnePage(BasePage):
     #     return self.wait_for_url("checkout-step-two.html")
 
     def fill_in_the_form(self, first_name, last_name, postal_code):
-        """Popunjava formu sa pauzama za CI stabilnost."""
-        self.enter_first_name(first_name)
+        # 1. Pronađi elemente
+        el_first = self.find(self._FIRST_NAME_FIELD)
+        el_last = self.find(self._LAST_NAME_FIELD)
+        el_zip = self.find(self._ZIP_POSTAL_CODE_FIELD)
+
+        # 2. Unesi podatke sa klikom na svako polje (forsira fokus)
+        el_first.click()
+        el_first.clear()
+        el_first.send_keys(first_name)
+
+        el_last.click()
+        el_last.clear()
+        el_last.send_keys(last_name)
+
+        el_zip.click()
+        el_zip.clear()
+        el_zip.send_keys(postal_code)
         
-        self.enter_last_name(last_name)
+        # 3. KLJUČNI DEO: Pošalji jedan "Enter" ili uradi pauzu
+        # Ovo daje React-u vremena da 'shvati' da je unos gotov
         
-        self.enter_postal_code(postal_code)
-        time.sleep(0.5) # Ključna pauza pre klika na Continue
+        el_zip.send_keys(Keys.ENTER)
 
     def click_on_continue_button(self):
         """
