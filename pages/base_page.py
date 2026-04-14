@@ -70,17 +70,10 @@ class BasePage:
 
 
     def type(self, locator, text):
-        """Čist Selenium unos bez JS-a, sa malim čekanjem da se fokusira."""
+        """Finds an element, clears existing text, and types new text"""
         element = self.find(locator)
-        element.click()
         element.clear()
-        
-        # Samo kucanje
         element.send_keys(text)
-        
-        # Provera: Ako kucamo u prazno, pokušaj još jednom (za spori CI)
-        if element.get_attribute("value") == "" and text != "":
-            element.send_keys(text)
 
     def get_text(self, locator):
         """Gets the visible text of the element found by the locator"""
