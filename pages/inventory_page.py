@@ -37,7 +37,7 @@ class InventoryPage(BasePage):
         return (By.CSS_SELECTOR, f"[data-test='remove-{key}']")
 
     def get_title(self):
-        """Returns the title text of the inventory page"""
+        """Returns the title text of the Inventory page"""
         return self.get_text(self._PAGE_TITLE)
 
     def add_item_to_cart(self, item_name):
