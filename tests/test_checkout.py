@@ -31,7 +31,6 @@ class TestCheckoutFlow:
         
         inventory_page.add_item_to_cart(TestData.BACKPACK)
         inventory_page.click_cart_icon()
-        cart_page.wait_for_page_load()
         cart_page.click_checkout()
         checkout_step_one_page.wait_for_page_load()
         checkout_step_one_page.fill_in_the_form(TestData.FIRST_NAME, TestData.LAST_NAME, TestData.POSTAL_CODE)

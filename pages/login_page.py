@@ -14,7 +14,6 @@ class LoginPage(BasePage):
 
 
     def __init__(self, driver):
-        """Initializes the LoginPage with the WebDriver and sets the page URL"""
         super().__init__(driver)
         self.url = TestData.URL_LOGIN
 
@@ -50,4 +49,3 @@ class LoginPage(BasePage):
     def wait_for_page_load(self):
         """Waits for the login form to be fully rendered"""
         self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test='login-container']")))
-

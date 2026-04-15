@@ -49,4 +49,3 @@ class TestInventory:
         prices = inventory_page.get_all_item_prices()
     
         assert prices == sorted(prices, reverse=reverse)
-

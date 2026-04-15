@@ -57,6 +57,17 @@ class CheckoutStepTwoPage(BasePage):
     def click_finish_button(self):
         self.js_click(self._FINISH_BUTTON)
 
+    # def click_finish_button(self):
+    #     """
+    #     Finalizes checkout using a JS click.
+    #     Ensures the 'Finish' action triggers regardless of viewport 
+    #     positioning or headless mode constraints.
+    #     """
+    #     button = self.wait.until(EC.element_to_be_clickable(self._FINISH_BUTTON))
+        
+    #     self.driver.execute_script("arguments[0].scrollIntoView(true);", button)
+        
+    #     self.driver.execute_script("arguments[0].click();", button)
 
     def wait_for_page_load(self):
         """Waits for the checkout summary to be fully rendered"""
