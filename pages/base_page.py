@@ -33,7 +33,7 @@ class BasePage:
 
     def click(self, locator):
         """Waits until an element is clickable and then performs a click action"""
-        element = self.wait_for_clickable(locator)
+        element = self.wait.until(EC.element_to_be_clickable(locator))
         element.click()
 
     def wait_for_clickable(self, locator):
@@ -84,29 +84,29 @@ class BasePage:
             raise
 
     
-    def wait_for_button_text(self, locator, text):
-        """Waits until the button element contains the expected text,
-        Uses 'innerText' attribute instead of '.text' property,
-        which is more reliable for button elements in headless Chrome on Linux"""
+    # def wait_for_button_text(self, locator, text):
+    #     """Waits until the button element contains the expected text,
+    #     Uses 'innerText' attribute instead of '.text' property,
+    #     which is more reliable for button elements in headless Chrome on Linux"""
     
-        def check_button_text(driver):
-            element = driver.find_element(*locator)
-            button_text = element.get_attribute("innerText") or ""
-            return text in button_text
+    #     def check_button_text(driver):
+    #         element = driver.find_element(*locator)
+    #         button_text = element.get_attribute("innerText") or ""
+    #         return text in button_text
         
-        try:
-            return self.wait.until(check_button_text)
-        except TimeoutException:
-            self.logger.error(f"Timeout: Button text '{text}' not found in element {locator}!")
-            raise
+    #     try:
+    #         return self.wait.until(check_button_text)
+    #     except TimeoutException:
+    #         self.logger.error(f"Timeout: Button text '{text}' not found in element {locator}!")
+    #         raise
 
-    def wait_for_url(self, url_part):
-        """Waits for the current URL to contain the given string"""
-        try:
-            self.wait.until(EC.url_contains(url_part))
-        except TimeoutException:
-            self.logger.error(f"Timeout: URL did not contain '{url_part}'! Current URL: {self.driver.current_url}")
-            raise
+    # def wait_for_url(self, url_part):
+    #     """Waits for the current URL to contain the given string"""
+    #     try:
+    #         self.wait.until(EC.url_contains(url_part))
+    #     except TimeoutException:
+    #         self.logger.error(f"Timeout: URL did not contain '{url_part}'! Current URL: {self.driver.current_url}")
+            # raise
 
     def clear_session(self):
         self.driver.delete_all_cookies()

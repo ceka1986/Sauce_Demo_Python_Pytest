@@ -10,11 +10,18 @@ from utils.data import TestData
 
 class TestCheckoutFlow:
     @pytest.fixture(autouse=True)
-    def setup_checkout(self, login_page: LoginPage, inventory_page: InventoryPage):
-        login_page.open()
-        login_page.login_with_credentials(TestData.VALID_USER, TestData.VALID_PASS)
-        inventory_page.wait_for_page_load()
+    def setup_checkout(self, logged_in_session):
+        """
+        By including 'logged_in_session' as a parameter, 
+        Pytest automatically handles both login and cleanup.
+        """
+        pass
 
+    @pytest.fixture
+    def go_to_checkout_form(self, logged_in_session, inventory_page:InventoryPage, cart_page:CartPage):
+        inventory_page.add_item_to_cart(TestData.BACKPACK)
+        inventory_page.click_cart_icon()
+        cart_page.click_checkout()
 
     def test_complete_checkout_flow(self, inventory_page:InventoryPage, 
                                           cart_page:CartPage, 
@@ -34,4 +41,16 @@ class TestCheckoutFlow:
 
         assert checkout_complete_page.get_page_title() == TestData.CHECKOUT_PAGE_TITLE
         assert checkout_complete_page.get_header_text() == TestData.CHECKOUT_COMPLETE_MESSAGE
+
+    @pytest.mark.parametrize("first_name,last_name,postal_code,expected_error", TestData.INVALID_FORM_DATA)
+    def test_invalid_form(self, go_to_checkout_form, checkout_step_one_page:CheckoutStepOnePage, first_name, last_name, postal_code, expected_error):
+        checkout_step_one_page.fill_in_the_form(first_name, last_name, postal_code)
+        checkout_step_one_page.click_continue_button()
+
+        actual_error = checkout_step_one_page.get_error_message()
+
+        assert expected_error in actual_error, f"Expected '{expected_error}', but got '{actual_error}'"
+        assert checkout_step_one_page.is_error_displayed()
+
+
         

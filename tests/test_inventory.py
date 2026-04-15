@@ -7,8 +7,6 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 
-
-
 class TestInventory:
 
     @pytest.fixture(autouse=True)

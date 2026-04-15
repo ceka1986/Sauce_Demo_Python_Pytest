@@ -25,17 +25,20 @@ class TestLogin:
 
         login_page.login_with_credentials(username, password)
 
-        error_message = login_page.get_error_message()
+        actual_error = login_page.get_error_message()
 
-        assert expected_error in error_message
+        assert expected_error in actual_error
         assert login_page.is_login_button_displayed()
 
     def test_locked_out_user(self, login_page:LoginPage):
 
         login_page.login_with_credentials(TestData.LOCKED_USER, TestData.VALID_PASS)
+
+        expected_error = TestData.ERROR_LOCKED_OUT
+        actual_error = login_page.get_error_message()
         
 
-        assert TestData.ERROR_LOCKED_OUT in login_page.get_error_message()
+        assert expected_error in actual_error
         assert login_page.is_login_button_displayed()
 
     def test_logout(self, login_page:LoginPage, sidebar:Sidebar):
