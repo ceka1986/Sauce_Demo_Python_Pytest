@@ -23,6 +23,10 @@ class TestData:
     ERROR_REQUIRED_PASS = "Epic sadface: Password is required"
     ERROR_LOCKED_OUT = "Epic sadface: Sorry, this user has been locked out."
     ERROR_WRONG_DATA = "Epic sadface: Username and password do not match any user in this service"
+    ERROR_FIRST_NAME = "Error: First Name is required"
+    ERROR_LAST_NAME = "Error: Last Name is required"
+    ERROR_POSTAL_CODE = "Error: Postal Code is required"
+
 
     # --- Inventory Items ---
     BACKPACK = "Sauce Labs Backpack"
@@ -35,6 +39,14 @@ class TestData:
     SORT_A_TO_Z = "Name (A to Z)"
     SORT_Z_TO_A = "Name (Z to A)"
 
+    # --- Checkout flow data ---
+    FIRST_NAME = "John"
+    LAST_NAME =  "Doe"
+    POSTAL_CODE = "11200"
+
+    CHECKOUT_PAGE_TITLE = "Checkout: Complete!"
+    CHECKOUT_COMPLETE_MESSAGE = "Thank you for your order!"
+
     # --- Parametrization List for Login ---
     INVALID_LOGIN_DATA = [
         (VALID_USER, WRONG_PASS, ERROR_WRONG_DATA),
@@ -43,11 +55,14 @@ class TestData:
         ("", "", ERROR_REQUIRED_USER),
         ("", VALID_PASS, ERROR_REQUIRED_USER),
         (VALID_USER, "", ERROR_REQUIRED_PASS)]
+    
 
-    # --- Checkout flow data ---
-    FIRST_NAME = "John"
-    LAST_NAME =  "Doe"
-    POSTAL_CODE = "11200"
+    # --- Parametrization List for Form Validation ---
+    INVALID_FORM_DATA = [
+        ("",LAST_NAME, POSTAL_CODE, ERROR_FIRST_NAME),
+        (FIRST_NAME,"", POSTAL_CODE, ERROR_LAST_NAME),
+        (FIRST_NAME, LAST_NAME, "", ERROR_POSTAL_CODE),
+        ("","","", ERROR_FIRST_NAME)
+    ]
 
-    CHECKOUT_PAGE_TITLE = "Checkout: Complete!"
-    CHECKOUT_COMPLETE_MESSAGE = "Thank you for your order!"
+    
