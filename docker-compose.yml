@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  # Service for our Python test execution
+  tests:
+    build: .
+    depends_on:
+      - chrome
+    environment:
+      # This URL tells Selenium to connect to the standalone chrome container
+      - SELENIUM_REMOTE_URL=http://chrome:4444/wd/hub
+    volumes:
+      # Sync the current directory with the container for live updates
+      - .:/app
+
+  # Service for the Selenium Standalone Chrome browser
+  chrome:
+    image: selenium/standalone-chrome:latest
+    ports:
+      - "4444:4444" # Port for Selenium Grid communication
+      - "7900:7900" # Port for VNC (to view the browser execution via web)
+    shm_size: 2gb # Increase shared memory to prevent browser crashes
