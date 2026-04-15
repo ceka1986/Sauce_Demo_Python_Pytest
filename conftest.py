@@ -1,4 +1,5 @@
 import os
+import time
 
 from pages.cart_page import CartPage
 from pages.checkout_complete_page import CheckoutCompletePage
@@ -18,20 +19,24 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 @pytest.fixture(scope="function")
 def driver():
-    """Sets up the Chrome driver with essential options and ensures clean teardown"""
     chrome_options = Options()
-    chrome_options.add_argument("--headless") 
+    chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--window-size=1920,1080")
-
-    chrome_options.add_argument("--disable-gpu")  
     chrome_options.add_argument("--remote-allow-origins=*")
-    
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=chrome_options)
-    #driver.maximize_window()
-    
+
+    remote_url = os.getenv("SELENIUM_REMOTE_URL")
+
+    remote_url = os.getenv("SELENIUM_REMOTE_URL")
+
+    if remote_url:
+        # Docker režim - direktno povezivanje
+        driver = webdriver.Remote(command_executor=remote_url, options=chrome_options)
+    else:
+        # Lokalni režim
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+
     yield driver
     driver.quit()
 

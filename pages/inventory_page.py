@@ -73,7 +73,7 @@ class InventoryPage(BasePage):
     def click_cart_icon(self):
         """Clicks the shopping cart icon and waits for navigation to cart page"""
         self.js_click(self._CART_LINK)
-        # return self.wait_for_url("cart.html")
+       
 
     def get_cart_badge_count(self):
         """Returns the number shown on the cart badge, or '0' if not visible"""
