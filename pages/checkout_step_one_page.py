@@ -49,13 +49,16 @@ class CheckoutStepOnePage(BasePage):
         self.enter_postal_code(postal_code)
 
     def click_continue_button(self):
-        """Clicks the 'Continue' button to proceed to the next step"""
-        button = self.wait.until(EC.element_to_be_clickable(self._CONTINUE_BUTTON))
+        self.js_click(self._CONTINUE_BUTTON)
 
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", button)
-        self.driver.execute_script("arguments[0].click();", button)
+    # def click_continue_button(self):
+    #     """Clicks the 'Continue' button to proceed to the next step"""
+    #     button = self.wait.until(EC.element_to_be_clickable(self._CONTINUE_BUTTON))
 
-        self.wait.until(EC.url_contains("checkout-step-two.html"))
+    #     self.driver.execute_script("arguments[0].scrollIntoView(true);", button)
+    #     self.driver.execute_script("arguments[0].click();", button)
+
+    #     self.wait.until(EC.url_contains("checkout-step-two.html"))
         
     def click_on_cancel_button(self):
         """Clicks the 'Cancel' button to return to the Cart page"""
