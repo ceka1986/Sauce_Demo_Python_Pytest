@@ -51,10 +51,19 @@ class BasePage:
 
 
     def type(self, locator, text):
-        element = self.wait.until(EC.element_to_be_clickable(locator))
+        """Types text into a React-controlled input field.
+        Uses JavaScript to set value and trigger React's synthetic events,
+        which is necessary for headless Chrome on Linux CI environments."""
+        element = self.find(locator)
         element.click()
         element.clear()
-        element.send_keys(text)
+        self.driver.execute_script("""
+            var nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+                window.HTMLInputElement.prototype, 'value').set;
+            nativeInputValueSetter.call(arguments[0], arguments[1]);
+            arguments[0].dispatchEvent(new Event('input', { bubbles: true }));
+            arguments[0].dispatchEvent(new Event('change', { bubbles: true }));
+        """, element, text)
 
     def get_text(self, locator):
         """Gets the visible text of the element found by the locator"""

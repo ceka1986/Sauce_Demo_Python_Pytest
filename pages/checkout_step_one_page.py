@@ -31,19 +31,16 @@ class CheckoutStepOnePage(BasePage):
         return self.get_text(self._PAGE_TITLE)
     
     def enter_first_name(self, first_name):
-        element = self.wait.until(EC.element_to_be_clickable(self._FIRST_NAME_FIELD))
-        element.clear()
-        element.send_keys(first_name)
+        """Enters the provided string into the First Name field"""
+        self.type(self._FIRST_NAME_FIELD, first_name)
 
     def enter_last_name(self, last_name):
-        element = self.wait.until(EC.element_to_be_clickable(self._LAST_NAME_FIELD))
-        element.clear()
-        element.send_keys(last_name)
+        """Enters the provided string into the Last Name field"""
+        self.type(self._LAST_NAME_FIELD, last_name)
 
     def enter_postal_code(self, postal_code):
-        element = self.wait.until(EC.element_to_be_clickable(self._ZIP_POSTAL_CODE_FIELD))
-        element.clear()
-        element.send_keys(postal_code)
+        """Enters the provided string into the Postal Code field"""
+        self.type(self._ZIP_POSTAL_CODE_FIELD, postal_code)
 
     def fill_in_the_form(self, first_name, last_name, postal_code):
         """Fills out the entire checkout form using the provided data"""
