@@ -31,10 +31,10 @@ def driver():
     remote_url = os.getenv("SELENIUM_REMOTE_URL")
 
     if remote_url:
-        # Docker režim - direktno povezivanje
+        # Docker
         driver = webdriver.Remote(command_executor=remote_url, options=chrome_options)
     else:
-        # Lokalni režim
+        # Local
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
     yield driver

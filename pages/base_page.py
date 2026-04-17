@@ -83,30 +83,6 @@ class BasePage:
             self.logger.error(f"Timeout: Text '{text}' not found in element {locator}!")
             raise
 
-    
-    # def wait_for_button_text(self, locator, text):
-    #     """Waits until the button element contains the expected text,
-    #     Uses 'innerText' attribute instead of '.text' property,
-    #     which is more reliable for button elements in headless Chrome on Linux"""
-    
-    #     def check_button_text(driver):
-    #         element = driver.find_element(*locator)
-    #         button_text = element.get_attribute("innerText") or ""
-    #         return text in button_text
-        
-    #     try:
-    #         return self.wait.until(check_button_text)
-    #     except TimeoutException:
-    #         self.logger.error(f"Timeout: Button text '{text}' not found in element {locator}!")
-    #         raise
-
-    # def wait_for_url(self, url_part):
-    #     """Waits for the current URL to contain the given string"""
-    #     try:
-    #         self.wait.until(EC.url_contains(url_part))
-    #     except TimeoutException:
-    #         self.logger.error(f"Timeout: URL did not contain '{url_part}'! Current URL: {self.driver.current_url}")
-            # raise
 
     def clear_session(self):
         self.driver.delete_all_cookies()
