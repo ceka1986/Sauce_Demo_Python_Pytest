@@ -13,13 +13,14 @@ class TestLogin:
     def setup_login(self, login_page: LoginPage):
         login_page.open()
 
+    @pytest.mark.smoke
     def test_valid_login(self, login_page:LoginPage, inventory_page:InventoryPage):
 
         login_page.login_with_credentials(TestData.VALID_USER,  TestData.VALID_PASS)
 
         assert inventory_page.get_title() == "Products"
 
-
+    @pytest.mark.regression
     @pytest.mark.parametrize("username, password, expected_error", TestData.INVALID_LOGIN_DATA)
     def test_invalid_logins(self, login_page:LoginPage, username, password, expected_error):
 
@@ -30,6 +31,7 @@ class TestLogin:
         assert expected_error in actual_error
         assert login_page.is_login_button_displayed()
 
+    @pytest.mark.regression
     def test_locked_out_user(self, login_page:LoginPage):
 
         login_page.login_with_credentials(TestData.LOCKED_USER, TestData.VALID_PASS)
@@ -41,6 +43,7 @@ class TestLogin:
         assert expected_error in actual_error
         assert login_page.is_login_button_displayed()
 
+    @pytest.mark.smoke
     def test_logout(self, login_page:LoginPage, sidebar:Sidebar):
 
         login_page.login_with_credentials(TestData.VALID_USER, TestData.VALID_PASS)

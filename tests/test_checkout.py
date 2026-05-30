@@ -23,6 +23,7 @@ class TestCheckoutFlow:
         inventory_page.click_cart_icon()
         cart_page.click_checkout()
 
+    @pytest.mark.regression
     def test_complete_checkout_flow(self, inventory_page:InventoryPage, 
                                           cart_page:CartPage, 
                                           checkout_step_one_page:CheckoutStepOnePage,
@@ -42,6 +43,7 @@ class TestCheckoutFlow:
         assert checkout_complete_page.get_page_title() == TestData.CHECKOUT_PAGE_TITLE
         assert checkout_complete_page.get_header_text() == TestData.CHECKOUT_COMPLETE_MESSAGE
 
+    @pytest.mark.regression
     @pytest.mark.parametrize("first_name,last_name,postal_code,expected_error", TestData.INVALID_FORM_DATA)
     def test_invalid_form(self, go_to_checkout_form, checkout_step_one_page:CheckoutStepOnePage, first_name, last_name, postal_code, expected_error):
         checkout_step_one_page.fill_in_the_form(first_name, last_name, postal_code)

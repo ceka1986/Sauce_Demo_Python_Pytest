@@ -5,7 +5,7 @@ import pytest
 from utils.data import TestData
 from selenium.webdriver.support import expected_conditions as EC
 
-
+pytestmark = pytest.mark.regression
 
 class TestInventory:
 
