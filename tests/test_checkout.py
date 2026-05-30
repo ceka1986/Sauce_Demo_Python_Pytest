@@ -23,7 +23,7 @@ class TestCheckoutFlow:
         inventory_page.click_cart_icon()
         cart_page.click_checkout()
 
-    @pytest.mark.regression
+    @pytest.mark.smoke
     def test_complete_checkout_flow(self, inventory_page:InventoryPage, 
                                           cart_page:CartPage, 
                                           checkout_step_one_page:CheckoutStepOnePage,
